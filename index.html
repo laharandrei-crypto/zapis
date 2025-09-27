@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Парикмахер Татьяна Ляхар - Запись онлайн</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Парикмахер Татьяна Ляхар - Запись онлайн</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -1144,227 +1145,210 @@
 </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="profile-container">
-                <img src="https://i.ibb.co/3541jL4Z/image.jpg" alt="Татьяна Ляхар" class="profile-image">
-                <h1>Татьяна Ляхар</h1>
-                <p class="subtitle">Профессиональный парикмахер-стилист</p>
-            </div>
-        </div>
-    </header>
-    
-    <div class="container">
-        <!-- Панель администратора -->
-        <div class="admin-panel" id="admin-panel">
-            <h3><i class="fas fa-user-shield"></i> Панель администратора</h3>
-            <div class="admin-controls">
-                <button class="admin-btn" id="view-bookings"><i class="fas fa-calendar-alt"></i> Просмотреть записи</button>
-                <button class="admin-btn" id="view-breaks"><i class="fas fa-coffee"></i> Просмотреть перерывы</button>
-                <button class="admin-btn" id="add-break"><i class="fas fa-plus"></i> Добавить перерыв</button>
-                <button class="admin-btn" id="delete-selected"><i class="fas fa-trash"></i> Удалить выбранные</button>
-                <button class="admin-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Выйти</button>
-            </div>
-            <div class="bookings-list" id="bookings-list">
-                <!-- Список записей будет загружен здесь -->
-            </div>
-            <div class="breaks-list" id="breaks-list">
-                <!-- Список перерывов будет загружен здесь -->
-            </div>
-        </div>
-        
-        <section class="booking-section">
-            <h2 class="section-title">Запись на ко мне</h2>
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
-                    <h3 id="current-month">Май 2023</h3>
-                    <button id="next-month"><i class="fas fa-chevron-right"></i></button>
-                </div>
-                <div class="calendar-grid" id="calendar">
-                    <!-- Календарь будет сгенерирован JavaScript -->
-                </div>
-            </div>
-            
-            <div class="time-slots">
-                <h3><i class="far fa-clock"></i> Выберите время</h3>
-                <div class="time-grid" id="time-slots">
-                    <!-- Временные слоты будут сгенерированы JavaScript -->
-                </div>
-                
-                <div class="booking-form" id="booking-form">
-                    <h3><i class="fas fa-edit"></i> Заполните данные</h3>
-                    <form id="appointment-form">
-                        <div class="form-group">
-                            <label for="name">Ваше имя</label>
-                            <input type="text" id="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Телефон</label>
-                            <input type="tel" id="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="service">Услуга</label>
-                            <select id="service" required>
-                                <option value="">Выберите услугу</option>
-                                <option value="стрижка" data-duration="1">Стрижка (1 час)</option>
-                                <option value="окрашивание" data-duration="3">Окрашивание (3 часа)</option>
-                                <option value="укладка" data-duration="2">Укладка (2 часа)</option>
-                                <option value="прическа" data-duration="2">Вечерняя прическа (2 часа)</option>
-                                <option value="консультация" data-duration="1">Консультация (1 час)</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn"><i class="fas fa-check"></i> Подтвердить запись</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Доступ к панели администратора -->
-        <div class="admin-access" id="admin-access">
-            <h3><i class="fas fa-lock"></i> Доступ к панели администратора</h3>
-            <div class="password-input">
-                <input type="password" id="admin-password" placeholder="Введите пароль">
-                <button class="admin-btn" id="login-btn"><i class="fas fa-sign-in-alt"></i> Войти</button>
-            </div>
-            <p id="password-error" style="color: red; display: none;">Неверный пароль</p>
-        </div>
-    </div>
-    
-    <!-- Панель действий администратора -->
-    <div class="admin-actions-panel" id="admin-actions-panel">
-        <button class="admin-action-btn edit" id="admin-edit"><i class="fas fa-edit"></i> Записать клиента</button>
-        <button class="admin-action-btn break" id="admin-break"><i class="fas fa-coffee"></i> Добавить перерыв</button>
-        <button class="admin-action-btn delete" id="admin-delete"><i class="fas fa-trash"></i> Удалить записи</button>
-        <button class="admin-action-btn notify" id="admin-notify"><i class="fas fa-bell"></i> Оповестить клиента</button>
-    </div>
-    
-    <!-- Уведомление о долгом нажатии -->
-    <div class="long-press-notification" id="long-press-notification">
+<header>
+<div class="container">
+<div class="profile-container">
+<img alt="Татьяна Ляхар" class="profile-image" src="https://i.ibb.co/3541jL4Z/image.jpg"/>
+<h1>Татьяна Ляхар</h1>
+<p class="subtitle">Профессиональный парикмахер-стилист</p>
+</div>
+</div>
+</header>
+<div class="container">
+<!-- Панель администратора -->
+<div class="admin-panel" id="admin-panel">
+<h3><i class="fas fa-user-shield"></i> Панель администратора</h3>
+<div class="admin-controls">
+<button class="admin-btn" id="view-bookings"><i class="fas fa-calendar-alt"></i> Просмотреть записи</button>
+<button class="admin-btn" id="view-breaks"><i class="fas fa-coffee"></i> Просмотреть перерывы</button>
+<button class="admin-btn" id="add-break"><i class="fas fa-plus"></i> Добавить перерыв</button>
+<button class="admin-btn" id="delete-selected"><i class="fas fa-trash"></i> Удалить выбранные</button>
+<button class="admin-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+</div>
+<div class="bookings-list" id="bookings-list">
+<!-- Список записей будет загружен здесь -->
+</div>
+<div class="breaks-list" id="breaks-list">
+<!-- Список перерывов будет загружен здесь -->
+</div>
+</div>
+<section class="booking-section">
+<h2 class="section-title">Запись на ко мне</h2>
+<div class="calendar-container">
+<div class="calendar-header">
+<button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+<h3 id="current-month">Май 2023</h3>
+<button id="next-month"><i class="fas fa-chevron-right"></i></button>
+</div>
+<div class="calendar-grid" id="calendar">
+<!-- Календарь будет сгенерирован JavaScript -->
+</div>
+</div>
+<div class="time-slots">
+<h3><i class="far fa-clock"></i> Выберите время</h3>
+<div class="time-grid" id="time-slots">
+<!-- Временные слоты будут сгенерированы JavaScript -->
+</div>
+<div class="booking-form" id="booking-form">
+<h3><i class="fas fa-edit"></i> Заполните данные</h3>
+<form id="appointment-form">
+<div class="form-group">
+<label for="name">Ваше имя</label>
+<input id="name" required="" type="text"/>
+</div>
+<div class="form-group">
+<label for="phone">Телефон</label>
+<input id="phone" required="" type="tel"/>
+</div>
+<div class="form-group">
+<label for="service">Услуга</label>
+<select id="service" required="">
+<option value="">Выберите услугу</option>
+<option data-duration="1" value="стрижка">Стрижка (1 час)</option>
+<option data-duration="3" value="окрашивание">Окрашивание (3 часа)</option>
+<option data-duration="2" value="укладка">Укладка (2 часа)</option>
+<option data-duration="2" value="прическа">Вечерняя прическа (2 часа)</option>
+<option data-duration="1" value="консультация">Консультация (1 час)</option>
+</select>
+</div>
+<button class="btn" type="submit"><i class="fas fa-check"></i> Подтвердить запись</button>
+</form>
+</div>
+</div>
+</section>
+<!-- Доступ к панели администратора -->
+<div class="admin-access" id="admin-access">
+<h3><i class="fas fa-lock"></i> Доступ к панели администратора</h3>
+<div class="password-input">
+<input id="admin-password" placeholder="Введите пароль" type="password"/>
+<button class="admin-btn" id="login-btn"><i class="fas fa-sign-in-alt"></i> Войти</button>
+</div>
+<p id="password-error" style="color: red; display: none;">Неверный пароль</p>
+</div>
+</div>
+<!-- Панель действий администратора -->
+<div class="admin-actions-panel" id="admin-actions-panel">
+<button class="admin-action-btn edit" id="admin-edit"><i class="fas fa-edit"></i> Записать клиента</button>
+<button class="admin-action-btn break" id="admin-break"><i class="fas fa-coffee"></i> Добавить перерыв</button>
+<button class="admin-action-btn delete" id="admin-delete"><i class="fas fa-trash"></i> Удалить записи</button>
+<button class="admin-action-btn notify" id="admin-notify"><i class="fas fa-bell"></i> Оповестить клиента</button>
+</div>
+<!-- Уведомление о долгом нажатии -->
+<div class="long-press-notification" id="long-press-notification">
         Удерживайте для действий администратора
     </div>
-    
-    <!-- Модальные окна -->
-    <div class="modal" id="cancel-modal">
-        <div class="modal-content">
-            <h3><i class="fas fa-times-circle"></i> Отмена записи</h3>
-            <p>Вы действительно хотите отменить эту запись?</p>
-            <div class="form-group">
-                <label for="cancel-reason">Причина отмены (необязательно):</label>
-                <input type="text" id="cancel-reason" placeholder="Например: непредвиденные обстоятельства">
+<!-- Модальные окна -->
+<div class="modal" id="cancel-modal">
+<div class="modal-content">
+<h3><i class="fas fa-times-circle"></i> Отмена записи</h3>
+<p>Вы действительно хотите отменить эту запись?</p>
+<div class="form-group">
+<label for="cancel-reason">Причина отмены (необязательно):</label>
+<input id="cancel-reason" placeholder="Например: непредвиденные обстоятельства" type="text"/>
+</div>
+<div class="modal-buttons">
+<button class="admin-btn" id="confirm-cancel">Отменить запись</button>
+<button class="cancel-btn" id="cancel-cancel">Отмена</button>
+</div>
+</div>
+</div>
+<div class="modal" id="break-modal">
+<div class="modal-content">
+<h3><i class="fas fa-coffee"></i> Добавить перерыв</h3>
+<div class="form-group">
+<label for="break-date">Дата перерыва:</label>
+<input id="break-date" type="date"/>
+</div>
+<div class="form-group">
+<label for="break-start">Начало перерыва:</label>
+<input id="break-start" max="17:00" min="09:00" type="time" value="12:00"/>
+</div>
+<div class="form-group">
+<label for="break-end">Конец перерыва:</label>
+<input id="break-end" max="18:00" min="09:00" type="time" value="15:00"/>
+</div>
+<div class="modal-buttons">
+<button class="admin-btn" id="confirm-break">Добавить перерыв</button>
+<button class="cancel-btn" id="cancel-break">Отмена</button>
+</div>
+</div>
+</div>
+<div class="modal" id="edit-break-modal">
+<div class="modal-content">
+<h3><i class="fas fa-edit"></i> Редактировать перерыв</h3>
+<div class="form-group">
+<label for="edit-break-date">Дата перерыва:</label>
+<input id="edit-break-date" type="date"/>
+</div>
+<div class="form-group">
+<label for="edit-break-start">Начало перерыва:</label>
+<input id="edit-break-start" type="time"/>
+</div>
+<div class="form-group">
+<label for="edit-break-end">Конец перерыва:</label>
+<input id="edit-break-end" type="time"/>
+</div>
+<div class="modal-buttons">
+<button class="admin-btn" id="save-break">Сохранить изменения</button>
+<button class="cancel-btn" id="cancel-edit-break">Отмена</button>
+<button class="delete-btn" id="delete-break">Удалить перерыв</button>
+</div>
+</div>
+</div>
+<!-- Новое модальное окно для переноса записи -->
+<div class="modal" id="move-modal">
+<div class="modal-content move-modal-content">
+<h3><i class="fas fa-calendar-alt"></i> Перенос записи</h3>
+<div class="form-group">
+<label for="move-client-name">Клиент:</label>
+<input id="move-client-name" readonly="" type="text"/>
+</div>
+<div class="form-group">
+<label for="move-client-phone">Телефон:</label>
+<input id="move-client-phone" readonly="" type="text"/>
+</div>
+<div class="form-group">
+<label for="move-service">Услуга (длительность):</label>
+<input id="move-service" readonly="" type="text"/>
+</div>
+<div class="date-time-selector">
+<div class="date-selector">
+<label for="move-date">Новая дата:</label>
+<input id="move-date" type="date"/>
+</div>
+<div class="time-selector">
+<label for="move-time">Новое время:</label>
+<div class="available-slots" id="available-slots">
+<!-- Доступные слоты будут загружены здесь -->
+</div>
+</div>
+</div>
+<div class="form-group">
+<label for="move-notify-client">Оповестить клиента:</label>
+<input checked="" id="move-notify-client" type="checkbox"/>
+</div>
+<div class="modal-buttons">
+<button class="admin-btn" id="confirm-move">Перенести запись</button>
+<button class="cancel-btn" id="cancel-move">Отмена</button>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="contact-info">
+<p><i class="fas fa-map-marker-alt"></i> <a href="https://yandex.by/maps/org/kapous_professional/245136758949/?indoorLevel=1&amp;ll=24.459418%2C53.163536&amp;z=17" target="_blank">Kapous Professional</a></p>
+<p><i class="fas fa-phone"></i> +375297888280</p>
+</div>
+<div class="social-links">
+<a href="https://www.instagram.com/tatianaliakhar/?hl=ru" target="_blank"><i class="fab fa-instagram"></i></a>
+<a href="https://vk.com/id39250640" target="_blank"><i class="fab fa-vk"></i></a>
+</div>
+<div class="copyright">
+                © 2023 Парикмахер Татьяна Ляхар. Все права защищены.
             </div>
-            <div class="modal-buttons">
-                <button class="admin-btn" id="confirm-cancel">Отменить запись</button>
-                <button class="cancel-btn" id="cancel-cancel">Отмена</button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal" id="break-modal">
-        <div class="modal-content">
-            <h3><i class="fas fa-coffee"></i> Добавить перерыв</h3>
-            <div class="form-group">
-                <label for="break-date">Дата перерыва:</label>
-                <input type="date" id="break-date">
-            </div>
-            <div class="form-group">
-                <label for="break-start">Начало перерыва:</label>
-                <input type="time" id="break-start" value="12:00" min="09:00" max="17:00">
-            </div>
-            <div class="form-group">
-                <label for="break-end">Конец перерыва:</label>
-                <input type="time" id="break-end" value="15:00" min="09:00" max="18:00">
-            </div>
-            <div class="modal-buttons">
-                <button class="admin-btn" id="confirm-break">Добавить перерыв</button>
-                <button class="cancel-btn" id="cancel-break">Отмена</button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal" id="edit-break-modal">
-        <div class="modal-content">
-            <h3><i class="fas fa-edit"></i> Редактировать перерыв</h3>
-            <div class="form-group">
-                <label for="edit-break-date">Дата перерыва:</label>
-                <input type="date" id="edit-break-date">
-            </div>
-            <div class="form-group">
-                <label for="edit-break-start">Начало перерыва:</label>
-                <input type="time" id="edit-break-start">
-            </div>
-            <div class="form-group">
-                <label for="edit-break-end">Конец перерыва:</label>
-                <input type="time" id="edit-break-end">
-            </div>
-            <div class="modal-buttons">
-                <button class="admin-btn" id="save-break">Сохранить изменения</button>
-                <button class="cancel-btn" id="cancel-edit-break">Отмена</button>
-                <button class="delete-btn" id="delete-break">Удалить перерыв</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Новое модальное окно для переноса записи -->
-    <div class="modal" id="move-modal">
-        <div class="modal-content move-modal-content">
-            <h3><i class="fas fa-calendar-alt"></i> Перенос записи</h3>
-            <div class="form-group">
-                <label for="move-client-name">Клиент:</label>
-                <input type="text" id="move-client-name" readonly>
-            </div>
-            <div class="form-group">
-                <label for="move-client-phone">Телефон:</label>
-                <input type="text" id="move-client-phone" readonly>
-            </div>
-            <div class="form-group">
-                <label for="move-service">Услуга (длительность):</label>
-                <input type="text" id="move-service" readonly>
-            </div>
-            
-            <div class="date-time-selector">
-                <div class="date-selector">
-                    <label for="move-date">Новая дата:</label>
-                    <input type="date" id="move-date">
-                </div>
-                <div class="time-selector">
-                    <label for="move-time">Новое время:</label>
-                    <div class="available-slots" id="available-slots">
-                        <!-- Доступные слоты будут загружены здесь -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="move-notify-client">Оповестить клиента:</label>
-                <input type="checkbox" id="move-notify-client" checked>
-            </div>
-            
-            <div class="modal-buttons">
-                <button class="admin-btn" id="confirm-move">Перенести запись</button>
-                <button class="cancel-btn" id="cancel-move">Отмена</button>
-            </div>
-        </div>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <div class="contact-info">
-                <p><i class="fas fa-map-marker-alt"></i> <a href="https://yandex.by/maps/org/kapous_professional/245136758949/?indoorLevel=1&ll=24.459418%2C53.163536&z=17" target="_blank">Kapous Professional</a></p>
-                <p><i class="fas fa-phone"></i> +375297888280</p>
-                
-            </div>
-            <div class="social-links">
-      <a href="https://www.instagram.com/tatianaliakhar/?hl=ru" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://vk.com/id39250640" target="_blank"><i class="fab fa-vk"></i></a>
-    </div>
-            <div class="copyright">
-                &copy; 2023 Парикмахер Татьяна Ляхар. Все права защищены.
-            </div>
-        </div>
-    </footer>
-    
-    <script>
+</div>
+</footer>
+<script>
         // Данные приложения
         let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
         let dayOffs = JSON.parse(localStorage.getItem('dayOffs')||'[]');
@@ -2633,6 +2617,48 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+</script>
+
+<style>
+/* Скрыть имена клиентов в календаре */
+.calendar-day .client-name {
+  display: none !important;
+}
+</style>
+<script>
+// Переопределяем функцию sendNotificationToMaster
+function sendNotificationToMaster(booking) {
+    const message = `Новая запись!\n\nКлиент: ${booking.name}\nТелефон: ${booking.phone}\nДата: ${booking.date}\nВремя: ${booking.time}\nУслуга: ${booking.service} (${booking.duration} ч.)\n\nСсылка на календарь: ${window.location.href}`;
+    const masterPhone = '+375297888280';
+    const whatsappUrl = `https://wa.me/${masterPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// Переопределяем функцию adminNotifyClient
+function adminNotifyClient(time) {
+    if (!selectedDate) return;
+    const booking = bookings.find(b => b.date === selectedDate && b.time === time);
+    if (!booking) {
+        alert('На это время нет записей');
+        return;
+    }
+    const message = `Напоминание о записи: ${selectedDate} в ${time}. Услуга: ${booking.service}`;
+    const whatsappUrl = `https://wa.me/${booking.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// Добавляем проверку на прошедшее время в handleBooking
+const oldHandleBooking = handleBooking;
+handleBooking = function(e) {
+    const now = new Date();
+    const selectedDateTime = new Date(`${selectedDate}T${selectedTime}`);
+    if (selectedDateTime < now) {
+        alert('Нельзя записаться на прошедшее время');
+        e.preventDefault();
+        return;
+    }
+    oldHandleBooking.call(this, e);
+}
 </script>
 </body>
 </html>
