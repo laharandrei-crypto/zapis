@@ -1,64 +1,1161 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Записи</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background:#f9f9f9; }
-    form { background:#fff; padding:20px; border-radius:8px; max-width:400px; box-shadow:0 0 5px rgba(0,0,0,.1); }
-    input,button { display:block; width:100%; margin-bottom:10px; padding:8px; }
-    button { background:#4CAF50; color:#fff; border:none; cursor:pointer; font-size:16px; }
-    button:hover { background:#45a049; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Запись — тёмная версия (index9)</title>
+<style>
+:root{
+  --bg:#0f0f13; --card:#17171b; --muted:#9aa0a6;
+  --accent1:#6A11CB; --accent2:#2575FC; --orange:#FFA500; --danger:#ff6b6b;
+  --text:#eaf0f6;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#08080a,var(--bg));color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.container{max-width:980px;margin:18px auto;padding:12px;display:grid;grid-template-columns:1fr 360px;gap:12px}
+
+.card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 8px 30px rgba(0,0,0,.6);transition:transform .18s;overflow:hidden}
+.card:active{transform:scale(.997)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.header h3{margin:0;font-size:18px}
+.controls button{background:transparent;border:none;color:var(--muted);font-size:20px;padding:6px;cursor:pointer;border-radius:8px}
+.controls button:active{transform:scale(.96)}
+
+/* calendar grid */
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:10px}
+.dow{font-size:12px;color:var(--muted);text-align:center;font-weight:600;text-transform:uppercase}
+.day{padding:10px;border-radius:10px;text-align:center;cursor:pointer;min-height:56px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;color:var(--text);position:relative}
+.day.today{box-shadow:0 0 0 2px rgba(255,255,255,.03) inset}
+.day.booked{box-shadow:inset 0 -6px 0 rgba(255,165,0,.05)}
+
+/* booking highlight (плашка на дне) */
+.day.has-booking{
+  background: linear-gradient(135deg, rgba(255,165,0,0.95), rgba(255,185,70,0.95));
+  color: #1b1b1b !important;
+  font-weight:700;
+  box-shadow:0 8px 24px rgba(255,165,0,0.12);
+  transform: translateY(-2px);
+}
+.day .badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.18);color:var(--text);padding:4px 8px;border-radius:10px;font-size:12px; font-weight:600;}
+
+/* slots */
+.slots-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+.slot{background:#232328;color:var(--orange);font-size:18px;font-weight:600;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+.slot:hover{transform:scale(1.04)}
+.slot.booked{background:linear-gradient(135deg,#ffb84d,#ff9b1a);color:#1b1b1b;cursor:not-allowed;opacity:0.98}
+.slot.past{opacity:.45;cursor:not-allowed}
+.slot.selected{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff}
+
+/* form */
+form input, form select, form button{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,0.02);color:var(--text);margin-top:10px;font-size:16px}
+form button{background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;color:#fff;font-weight:600;cursor:pointer}
+
+/* right column */
+.profile{display:flex;gap:12px;align-items:center}
+.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.06);box-shadow:0 8px 20px rgba(0,0,0,.6)}
+.info h4{margin:0 0 6px 0}
+.info p{margin:0;color:var(--muted)}
+
+/* admin panel */
+.admin-panel{position:fixed;top:16px;right:12px;width:420px;height:82vh;transform:translateX(110%);transition:transform .28s cubic-bezier(.2,.9,.2,1);z-index:1200;border-radius:12px;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.7);background:linear-gradient(180deg,#0f1114,#141416)}
+.admin-panel.open{transform:translateX(0)}
+.admin-panel .pad{padding:14px}
+.btn{display:inline-block;padding:10px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;cursor:pointer;font-weight:600}
+.small{font-size:13px;color:var(--muted)}
+
+/* modals */
+.modal{display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:1300}
+.modal.open{display:flex}
+.modal .box{background:#0c0c0f;padding:16px;border-radius:12px;width:420px;max-width:92%}
+
+/* responsive */
+@media (max-width:980px){.container{grid-template-columns:1fr;} .avatar{width:80px;height:80px} .slots-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* weekend highlight */
+.day.weekend{background:linear-gradient(180deg, rgba(255,40,40,0.06), rgba(255,40,40,0.02)); color:#ff6b6b; border:1px solid rgba(255,40,40,0.06);}
+.info a{display:block;padding:10px 12px;margin-top:6px;border:1px solid rgba(255,255,255,0.04);border-radius:10px;background:rgba(255,255,255,0.01);font-size:16px;text-decoration:none}
+.info span{display:block;padding:10px 12px;margin-top:6px;border:1px solid rgba(255,255,255,0.04);border-radius:10px;background:rgba(255,255,255,0.01);font-size:16px}
+
+/* brand colors for links */
+.info a.instagram{color:#C13584!important;}
+.info a.whatsapp{color:#25D366!important;}
+.info a.viber{color:#7360f2!important;}
+.info a.vk{color:#0077FF!important;}
+.info a.yandex{color:#FF0000!important;}
+
+/* Mobile admin panel: full screen and slide from bottom */
+@media (max-width:600px){
+  .admin-panel{left:0;right:0;top:auto;bottom:0;width:100%;height:100vh;border-radius:12px 12px 0 0;transform:translateY(110%);transition:transform .28s cubic-bezier(.2,.9,.2,1);}
+  .admin-panel.open{transform:translateY(0);}
+  /* ensure it overlays properly */
+  body.modal-open{overflow:hidden;height:100vh;}
+}
+
+.has-booking {
+  background: linear-gradient(145deg, #ff7f00, #ffae42);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  color: #fff !important;
+  font-weight: bold;
+  transform: translateY(-1px);
+}
+#adminPanel {
+  font-size: 1.0em;
+}
+#adminPanel button {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 6px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #222;
+  color: #fff;
+  font-size: 0.95em;
+  cursor: pointer;
+}
+#adminPanel button:hover { background: #333; }
+
+/* booking items in admin (плашки) */
+.booking-item{background:linear-gradient(90deg, rgba(255,165,0,0.06), rgba(255,165,0,0.02)); border-left:4px solid var(--orange); padding:10px; margin-bottom:8px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; gap:8px; color:var(--text)}
+.booking-item .meta{display:flex;flex-direction:column}
+.booking-actions{display:flex;gap:8px;flex-shrink:0}
+
+/* admin buttons wrap */
+.booking-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+#adminPanel button {
+  font-size:0.9em;
+  padding:6px 10px;
+}
+
+/* invisible 3mm frame on mobile */
+@media (max-width:768px){
+  html,body{
+    padding:1mm;
+    box-sizing:border-box;
+  }
+}
+
+
+/* responsive admin buttons for small screens */
+@media (max-width:600px){
+  .booking-actions{
+    flex-wrap:wrap;
+    gap:4px;
+  }
+  .booking-actions .btn{
+    font-size:0.8em;
+    padding:4px 6px;
+    flex:1 1 auto; /* все кнопки растягиваются равномерно */
+    text-align:center;
+  }
+}
+
+
+/* prevent horizontal overflow */
+html, body { overflow-x: hidden; }
+
+/* booking items wrapping and shrink fixes */
+.booking-item{display:flex;flex-wrap:wrap;gap:8px;align-items:center;width:100%}
+.booking-item .meta{flex:1 1 60%;min-width:0}
+.booking-actions{display:flex;flex-wrap:wrap;gap:6px;flex:0 1 auto;min-width:0;justify-content:flex-end}
+.booking-actions .btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* mobile adjustments for booking items */
+@media (max-width:600px){
+  .booking-item{flex-direction:column;align-items:stretch}
+  .booking-item .meta{margin-bottom:6px}
+  .booking-actions{justify-content:flex-start}
+  .booking-actions .btn{flex:1 1 auto;width:100%;padding:8px 10px}
+}
+
+
+html,body{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  overflow-x:hidden;
+}
+
+/* основной контейнер */
+.site-wrap{
+  width:100%;
+  margin:0;
+  padding:0 1mm; /* симметричный отступ слева и справа */
+  box-sizing:border-box;
+}
+
+/* карточки и контейнеры не выходят за границы */
+.container,
+.card,
+.admin-panel{
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+
+/* оранжевая кнопка отмены */
+.btn.cancel-btn{
+  background:#ff9800!important;
+  color:#fff!important;
+}
+
+
+/* Большая оранжевая кнопка отмены у записи */
+.btn.cancel-btn{
+  background:#ff9800!important;
+  color:#fff!important;
+  font-size:1em;
+  padding:10px 14px;
+  border-radius:8px;
+}
+
+/* Большая оранжевая кнопка "Найти мои записи" */
+#findBookingsBtn{
+  background:#ff9800!important;
+  color:#fff!important;
+  font-size:1em;
+  padding:10px 14px;
+  border-radius:8px;
+  border:none;
+  width:100%;
+}
+
+
+/* Светлее фон сайта */
+body{
+  background:#1a1a1a !important;
+}
+.card, .container{
+  background:#222 !important;
+}
+
+/* Выходной (воскресенье) как понедельник */
+.calendar-cell.weekend{
+  background:#b33 !important;
+  color:#fff !important;
+}
+
+
+.service-btn.selected {
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  color:#fff;
+}
+</style>
+
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:0;background:#000;}
+.page-container{
+  max-width:420px;
+  margin:0 auto;
+  padding:0 12px;
+}
+#service{display:none !important}
+.service-btn{padding:10px;border-radius:10px;border:none;background:#333;color:#fff;text-align:left;cursor:pointer;font-weight:600;width:100%;box-sizing:border-box}
+.service-btn small{display:block;font-weight:400;color:#ccc;font-size:13px;margin-top:4px}
+.category-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.category-btn{flex:1;padding:10px;border:none;border-radius:8px;background:#2575FC;color:#fff;font-weight:600;cursor:pointer}
+</style>
+
+
+<!-- Override: full-width layout with symmetric inner padding (opposite of centered max-width) -->
+<style>
+/* reset problematic mm paddings and ensure symmetric padding */
+html, body, .site-wrap, .container, .main-wrapper, .page-container {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+/* Make page content use full width but keep equal inner padding */
+.page-container {
+  max-width: none !important;
+  margin: 0 !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+/* Ensure inner site cards don't overflow and have consistent internal padding */
+.card, .site-wrap, .container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Ensure category buttons layout stays consistent: two per row on narrow screens */
+.category-buttons { display:flex; flex-wrap:wrap; gap:8px; }
+.category-btn { flex: 1 1 calc(50% - 8px); box-sizing: border-box; min-width:0; }
+
+/* Services list should be hidden until a category is clicked (already handled by JS) */
+#services-list { display: none; }
+
+/* small screens: reduce horizontal gaps */
+@media (max-width:420px){
+  .category-btn { flex: 1 1 48%; }
+  .service-btn { font-size: 15px; padding:10px; }
+}
+</style>
+
 </head>
 <body>
+  <div class="page-container">
+<div class="site-wrap">
 
-  <h1>Добавить новую запись</h1>
-  <form id="addForm">
-    <input name="id" placeholder="ID" required>
-    <input name="date" type="date" required>
-    <input name="time" type="time" required>
-    <input name="name" placeholder="Имя" required>
-    <input name="phone" placeholder="Телефон" required>
-    <input name="service" placeholder="Услуга" required>
-    <input name="duration" type="number" placeholder="Длительность (часы)" required>
-    <button type="submit">Сохранить</button>
-  </form>
+<div class="container">
+  <div class="left">
+    <div class="card">
+      <div class="header">
+        <div class="controls">
+          <button id="prev" aria-label="prev">‹</button>
+        </div>
+        <h3 id="month">—</h3>
+        <div class="controls"><button id="next" aria-label="next">›</button></div>
+      </div>
 
-  <script>
-    // URL твоего Apps Script
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw6X1vA9I9EC_TIjf-mDJUKOmZHvxEZbzVwDRwvP2HBG1TgsajsHuNpWQI-ChvuG19JyA/exec';
+      <div class="card">
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
+          <strong>Календарь</strong>
+          <span class="small">Пн — выходной</span>
+        </div>
+        <div id="calendar" class="grid" style="margin-top:10px"></div>
+<div id="slots" class="slots-grid"></div>
+      </div>
 
-    document.getElementById('addForm').addEventListener('submit', async e=>{
-      e.preventDefault();
-      const form = e.target;
-      const data = {
-        id: form.id.value,
-        date: form.date.value,
-        time: form.time.value,
-        name: form.name.value,
-        phone: form.phone.value,
-        service: form.service.value,
-        duration: form.duration.value
-      };
+      <!-- Пользовательский порядок: сначала Запись, затем Выберите время -->
+      <div class="card" style="margin-top:12px">
+        <strong>Запись</strong>
+        <form id="form">
+          
+<select id="service" required>
+  <option value="">Выберите услугу</option>
+  <optgroup label="Стрижка">
+    <option value="Стрижка женская" data-duration="1" data-price="30">Стрижка женская — 30 р (1 час)</option>
+    <option value="Стрижка челки" data-duration="0.25" data-price="10">Стрижка челки — 10 р (15 мин)</option>
+    <option value="Полировка волос" data-duration="1" data-price="40">Полировка волос — 40 р (1 час)</option>
+  </optgroup>
 
-      try {
-        const res = await fetch(scriptURL, {
-          method:'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({
-            action:'set_all',
-            data:{ bookings:[data], breaks:[], holidays:[] }
-          })
-        });
-        const json = await res.json();
-        alert('Ответ сервера: ' + JSON.stringify(json));
-        form.reset();
-      } catch(err){
-        alert('Ошибка: ' + err.message);
+  <optgroup label="Мелирование">
+    <option value="Мелирование (короткий)" data-duration="2" data-price="50">Мелирование — короткий волос от 50 р (2 часа)</option>
+    <option value="Мелирование (средний)" data-duration="2.5" data-price="70">Мелирование — средний волос от 70 р (2.5 часа)</option>
+    <option value="Мелирование (длинный)" data-duration="3.5" data-price="100">Мелирование — длинный волос от 100 р (3.5 часа)</option>
+    <option value="Прикорневое мелирование" data-duration="1.4" data-price="60">Прикорневое мелирование — от 60 р (1 ч 24 мин)</option>
+  </optgroup>
+
+  <optgroup label="Окрашивание (в один тон)">
+    <option value="Окрашивание короткий" data-duration="1.2" data-price="40">Короткий волос — от 40 р (1 ч 12 мин)</option>
+    <option value="Окрашивание средний" data-duration="1.4" data-price="50">Средней длины — от 50 р (1 ч 24 мин)</option>
+    <option value="Окрашивание длинный" data-duration="2" data-price="70">Длинный — от 70 р (2 часа)</option>
+    <option value="Сложное окрашивание" data-duration="3.5" data-price="100">Сложное окрашивание — от 100 р (3.5 часа)</option>
+  </optgroup>
+
+  <optgroup label="Укладка">
+    <option value="Укладка волос" data-duration="0.67" data-price="25">Укладка волос — от 25 р (40 мин)</option>
+  </optgroup>
+</select>
+
+<!-- Visible services UI -->
+<div class="services-ui">
+  <div class="category-buttons">
+    <button type="button" class="category-btn" data-cat="Стрижка">Стрижка</button>
+    <button type="button" class="category-btn" data-cat="Мелирование">Мелирование</button>
+    <button type="button" class="category-btn" data-cat="Окрашивание (в один тон)">Окрашивание</button>
+    <button type="button" class="category-btn" data-cat="Укладка">Укладка</button>
+  </div>
+  <div id="services-list" style="display:none;flex-direction:column;gap:8px;"></div>
+</div>
+
+
+
+          <input id="name" placeholder="Ваше имя" required />
+          <input id="phone" placeholder="Телефон (+375...)" required />
+          <button type="submit">Подтвердить</button>
+        </form>
+<div class="card" style="margin-top:12px">
+  <strong>Отменить запись</strong>
+  <input id="cancelPhone" placeholder="Телефон (+375...)" />
+  <button id="findBookingsBtn">Найти мои записи</button>
+  <div id="myBookings" style="margin-top:10px"></div>
+</div>
+
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <strong>Выберите время</strong>
+        
+      </div>
+
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="card profile">
+      <img class="avatar" id="avatar" src=data:image/jpeg;base64,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 alt="Татьяна" />
+      
+<div class="info">
+    <h4>Татьяна Ляхар</h4>
+    <p class="small">Профессиональный парикмахер-стилист</p>
+    <div class="small" style="display:flex;flex-direction:column;gap:4px">
+      <span style="color:var(--orange);">+375 29 788-82-80</span>
+      <a  href="https://www.instagram.com/tatianaliakhar" class="instagram" target="_blank">Instagram</a>
+      <a  href="https://wa.me/375297888280" class="whatsapp" target="_blank">WhatsApp</a>
+      <a  href="viber://chat?number=%2B375297888280" class="viber" target="_blank">Viber</a>
+      <a  href="https://vk.com/id39250640" class="vk" target="_blank">VK</a>
+      <a  href="https://yandex.by/maps/org/kapous_professional/245136758949/?indoorLevel=1&ll=24.459418%2C53.163536&z=17" class="yandex" target="_blank">Адрес (Яндекс.Карты)</a>
+    </div>
+</div>
+
+</div>
+
+    <div class="card" id="scheduleBlock" style="margin-top:12px">
+        <strong>График работы</strong>
+      <p class="small" style="margin-top:8px">Пн: выходной<br>Вт–Пт: 10:00–18:00<br>Сб–Вс: 10:00–15:00</p>
+    </div>
+  </div>
+</div>
+
+<!-- admin panel -->
+<div id="adminPanel" class="admin-panel" aria-hidden="true">
+  <div class="pad">
+    <h3>Панель администратора</h3>
+    <div id="loginBox">
+      <input id="adminPassword" type="password" placeholder="Пароль" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.04);background:transparent;color:var(--text)" />
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button id="loginBtn" class="btn">Войти</button>
+        <button id="closePanel" class="btn" style="background:#333">Закрыть</button>
+      </div>
+      <p id="loginError" style="color:var(--danger);display:none;margin-top:8px">Неверный пароль</p>
+    </div>
+    <div id="adminContent" style="display:none;margin-top:12px">      <button id="addHolidayBtn" class="btn" style="background:#b33">Добавить выходной</button>      <div style="margin-top:10px"><strong>Выходные (админ)</strong><div id="holidaysList" class="list" style="margin-top:6px"></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="addBreakBtn" class="btn">Добавить перерыв</button>
+        <button id="clearAll" class="btn" style="background:#444">Удалить все</button>
+        <button id="logoutBtn" class="btn" style="background:#222">Выйти</button>
+      </div>
+      <h4 style="margin-top:12px">Перерывы</h4>
+      <div id="breaksList"></div>
+      <h4 style="margin-top:12px">Записи</h4>
+      <div id="bookingsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+
+<!-- Price/info modal (added) -->
+<div id="priceModal" class="price-modal" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:1400">
+  <div class="box" style="background:#0c0c0f;padding:16px;border-radius:12px;width:320px;max-width:92%;text-align:center;color:#fff">
+    <h4 id="priceTitle">Информация об услуге</h4>
+    <p id="priceText" style="white-space:pre-line;margin:8px 0;"></p>
+    <button id="closePrice" style="margin-top:12px;padding:8px 12px;border:none;border-radius:8px;background:linear-gradient(135deg,#6A11CB,#2575FC);color:#fff;font-weight:600;cursor:pointer;width:100%">Закрыть</button>
+  </div>
+</div>
+
+
+
+<div id="holidayModal" class="modal"><div class="box">
+  <h4>Добавить выходной</h4>
+  <input id="holidayDate" type="date" />
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+    <button id="saveHoliday" class="btn">Сохранить</button>
+    <button id="cancelHoliday" class="btn" style="background:#444">Отмена</button>
+  </div>
+</div></div>
+
+<div id="breakModal" class="modal"><div class="box">
+  <h4>Перерыв</h4>
+  <input id="breakDate" type="date" />
+  <input id="breakStart" type="time" />
+  <input id="breakEnd" type="time" />
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+    <button id="saveBreak" class="btn">Сохранить</button>
+    <button id="cancelBreak" class="btn" style="background:#444">Отмена</button>
+  </div>
+</div></div>
+
+<div id="moveModal" class="modal"><div class="box">
+  <h4>Перенос записи</h4>
+  <input id="moveDate" type="date" />
+  <select id="moveTime"></select>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+    <button id="confirmMove" class="btn">Перенести</button>
+    <button id="cancelMove" class="btn" style="background:#444">Отмена</button>
+  </div>
+</div></div>
+
+
+<script>
+/* Rewritten unified script - robust calendar, slots, bookings, admin actions
+   - Supports 30-min slots, durations in hours
+   - workSchedule in minutes; 0 (Sun) and 1 (Mon) are off by default
+   - Admin can add bookings on off-days/breaks via admin modal
+   - Client can cancel bookings by phone
+*/
+
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbw6X1vA9I9EC_TIjf-mDJUKOmZHvxEZbzVwDRwvP2HBG1TgsajsHuNpWQI-ChvuG19JyA/exec' || null;
+
+// State
+let current = new Date();
+let selectedDate = null;
+let selectedTime = null;
+let bookings = JSON.parse(localStorage.getItem('bookings')||'[]');
+let breaks = JSON.parse(localStorage.getItem('breaks')||'[]');
+let holidays = JSON.parse(localStorage.getItem('holidays')||'[]');
+
+// Elements
+const calendarEl = document.getElementById('calendar');
+const monthEl = document.getElementById('month');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const slotsEl = document.getElementById('slots');
+const form = document.getElementById('form');
+const serviceEl = document.getElementById('service');
+const bookingsList = document.getElementById('bookingsList');
+const breaksList = document.getElementById('breaksList');
+
+// Admin state
+function isAdmin(){ return sessionStorage.getItem('isAdmin') === 'true'; }
+
+// Work schedule in minutes (start inclusive, end exclusive)
+const workSchedule = {
+  0: null, // Sun - off
+  1: null, // Mon - off
+  2: { start: 10*60, end: 16*60 + 30 }, // Tue
+  3: { start: 10*60, end: 16*60 + 30 }, // Wed
+  4: { start: 10*60, end: 16*60 + 30 }, // Thu
+  5: { start: 10*60, end: 16*60 + 30 }, // Fri
+  6: { start: 10*60, end: 15*60 } // Sat
+};
+
+// Utils
+function localIso(d){ const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
+function toMinutes(t){ if(!t) return 0; const [hh,mm]=t.split(':').map(Number); return hh*60 + (mm||0); }
+function minutesToTime(m){ const hh = Math.floor(m/60); const mm = m%60; return String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0'); }
+function nowIsAfter(dateIso, timeStr){ const dt=new Date(dateIso+'T'+timeStr+':00'); return new Date() > dt; }
+
+// Persistence + remote sync helper
+async function syncSave(action, data){
+  try{
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+    localStorage.setItem('breaks', JSON.stringify(breaks));
+    localStorage.setItem('holidays', JSON.stringify(holidays));
+    if(SHEET_API_URL){
+      await fetch(SHEET_API_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action, payload:data})}).catch(()=>null);
+    }
+    return true;
+  }catch(e){ console.warn('syncSave error', e); return false; }
+}
+
+// Check if date is weekend/holiday/break
+function isWeekendOrBreak(dateIso){
+  const d = new Date(dateIso);
+  if(d.getDay()===0) return true; // Sunday always off
+  if(holidays.includes(dateIso)) return true;
+  if(breaks.some(b=>b.date===dateIso)) return true;
+  // if schedule is null it's off
+  const sched = workSchedule[d.getDay()];
+  if(!sched) return true;
+  return false;
+}
+
+// Availability check (startTime like '10:00', duration in hours)
+function isAvailable(dateIso, startTime, durationHours, ignoreId=null){
+  const s = toMinutes(startTime);
+  const e = s + Math.round(durationHours*60);
+  const dow = new Date(dateIso).getDay();
+  const sched = workSchedule[dow];
+  if(!sched) return false;
+  if(e > sched.end) return false;
+  if(nowIsAfter(dateIso, startTime)) return false;
+  // check breaks
+  for(const br of breaks.filter(b=>b.date===dateIso)){
+    const brs = toMinutes(br.start), bre = toMinutes(br.end);
+    if(!(e <= brs || s >= bre)) return false;
+  }
+  // check bookings overlap
+  for(const b of bookings.filter(b=>b.date===dateIso)){
+    if(ignoreId && b.id===ignoreId) continue;
+    const bs = toMinutes(b.time), be = bs + Math.round(b.duration*60);
+    if(!(e <= bs || s >= be)) return false;
+  }
+  return true;
+}
+
+// Render calendar (robust)
+function renderCalendar(){
+  const y = current.getFullYear(), m = current.getMonth();
+  monthEl.textContent = current.toLocaleDateString('ru-RU',{month:'long', year:'numeric'});
+  calendarEl.innerHTML = '';
+  const days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  days.forEach(d=>{ const el=document.createElement('div'); el.className='dow'; el.textContent=d; calendarEl.appendChild(el); });
+
+  const first = new Date(y,m,1), last = new Date(y,m+1,0);
+  const start = (first.getDay()||7)-1; // shift so Monday=0
+  for(let i=0;i<start;i++){ const blank = document.createElement('div'); blank.className='day other'; calendarEl.appendChild(blank); }
+
+  for(let d=1; d<= last.getDate(); d++){
+    const date = new Date(y,m,d);
+    const iso = localIso(date);
+    const el = document.createElement('div');
+    el.className = 'day';
+    el.textContent = d;
+    el.dataset.date = iso;
+    const dow = date.getDay();
+    // mark today
+    if(date.toDateString() === (new Date()).toDateString()) el.classList.add('today');
+    // mark weekend / off days (Sunday or schedule null or holiday)
+    if(dow===0 || !workSchedule[dow] || holidays.includes(iso)) el.classList.add('weekend');
+    // mark breaks/bookings
+    const dayBookings = bookings.filter(b=>b.date===iso);
+    if(dayBookings.length){ el.classList.add('has-booking'); const badge=document.createElement('span'); badge.className='badge'; badge.textContent=dayBookings.length; el.appendChild(badge); }
+    const dayBreaks = breaks.filter(br=>br.date===iso);
+    if(dayBreaks.length) el.classList.add('break-day');
+    if(selectedDate===iso) el.classList.add('selected');
+    // click handler
+    el.addEventListener('click', function(){
+      selectedDate = iso;
+      selectedTime = null;
+      renderCalendar();
+      renderSlots();
+});
+    calendarEl.appendChild(el);
+  }
+}
+
+// Render slots with 30-min step
+function renderSlots(){
+  slotsEl.innerHTML='';
+  if(!selectedDate){ slotsEl.innerHTML='<div class="small" style="grid-column:1/-1;text-align:center">Сначала выберите дату</div>'; return; }
+  const dow = new Date(selectedDate).getDay();
+  const sched = workSchedule[dow];
+  if(!sched){ slotsEl.innerHTML='<div class="small" style="grid-column:1/-1;text-align:center;color:var(--danger)">Выходной</div>'; return; }
+  // duration of selected service in hours
+  const dur = parseFloat(serviceEl.options[serviceEl.selectedIndex]?.dataset.duration || '1');
+  const step = 30; // minutes
+  // generate start times where full duration fits in schedule
+  for(let t=sched.start; t + Math.round(dur*60) <= sched.end; t += step){
+    const time = minutesToTime(t);
+    const btn = document.createElement('div');
+    btn.className='slot';
+    btn.textContent = time;
+    btn.dataset.time = time;
+    if(!isAvailable(selectedDate, time, dur)) btn.classList.add('booked');
+    if(nowIsAfter(selectedDate, time)) btn.classList.add('past');
+    if(selectedTime===time) btn.classList.add('selected');
+    btn.addEventListener('click', ()=>{
+  if(btn.classList.contains('booked')||btn.classList.contains('past')) return;
+  if(isWeekendOrBreak(selectedDate) && !isAdmin()){
+    alert('На выходной/в перерыв запись возможна только у администратора.');
+    return;
+  }
+  selectedTime = btn.dataset.time || time;
+  // убираем старое выделение
+  document.querySelectorAll('.slot.selected').forEach(s=>s.classList.remove('selected'));
+  // выделяем выбранный слот
+  btn.classList.add('selected');
+});
+    slotsEl.appendChild(btn);
+  }
+  // if no visible slots
+  if(!slotsEl.querySelector('.slot')){
+    slotsEl.innerHTML = '<div class="small" style="grid-column:1/-1;text-align:center">Нет доступных слотов</div>';
+  }
+}
+
+// Booking creation (from public form)
+form.addEventListener('submit', async function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const service = serviceEl.value;
+  if(!selectedDate || !selectedTime){ alert('Выберите дату и время'); return; }
+  const dur = parseFloat(serviceEl.options[serviceEl.selectedIndex]?.dataset.duration || '1');
+  // check admin vs client
+  if(isWeekendOrBreak(selectedDate) && !isAdmin()){
+    alert('На выходной или перерыв запись возможна только администратором.');
+    return;
+  }
+  if(!isAvailable(selectedDate, selectedTime, dur)){
+    alert('Время занято или недоступно'); renderSlots(); return;
+  }
+  const booking = { id: Date.now(), date: selectedDate, time: selectedTime, name, phone, service, duration: dur };
+  bookings.push(booking);
+  await syncSave('set_all', bookings);
+  renderCalendar(); renderSlots();
+  form.reset(); //selectedTime не сбрасываем;
+  alert('Запись подтверждена');
+  // notify admin
+  notifyWhatsApp('+375297888280', `Новая запись\nКлиент: ${booking.name} ${booking.phone}\n${booking.date} ${booking.time}\n${booking.service}`);
+});
+
+// Client cancel by phone
+(function setupCancelByPhone(){
+  const cancelPhoneInput = document.getElementById('cancelPhone');
+  const findBtn = document.getElementById('findBookingsBtn');
+  const myBookingsDiv = document.getElementById('myBookings');
+  if(!findBtn) return;
+  findBtn.addEventListener('click', ()=>{
+    const phone = (cancelPhoneInput.value||'').trim();
+    if(!phone){ alert('Введите телефон'); return; }
+    const cleaned = phone.replace(/\D/g,'');
+    const my = bookings.filter(b=> (b.phone||'').replace(/\D/g,'')===cleaned && new Date(b.date+'T'+b.time) > new Date());
+    myBookingsDiv.innerHTML = '';
+    if(my.length===0){ myBookingsDiv.innerHTML = '<div class="small">Будущих записей не найдено</div>'; return; }
+    my.forEach(b=>{
+      const row = document.createElement('div'); row.className='booking-item';
+      const meta = document.createElement('div'); meta.className='meta'; meta.innerHTML = `<strong>${b.date} ${b.time}</strong><div class="small">${b.service}</div>`;
+      const actions = document.createElement('div'); actions.className='booking-actions';
+      const del = document.createElement('button'); del.className='btn cancel-btn'; del.textContent='Отменить';
+      del.addEventListener('click', async ()=>{
+        if(!confirm('Отменить эту запись?')) return;
+        bookings = bookings.filter(x=>x.id!==b.id);
+        await syncSave('set_all', bookings);
+        renderCalendar(); renderSlots(); renderAdmin();
+        notifyWhatsApp('+375297888280', `Клиент ${b.name} (${b.phone}) отменил запись ${b.service} ${b.date} ${b.time}`);
+        row.remove();
+      });
+      actions.appendChild(del);
+      row.appendChild(meta); row.appendChild(actions); myBookingsDiv.appendChild(row);
+    });
+  });
+})();
+
+// Admin: render bookings and controls
+function renderAdmin(){
+  if(!bookingsList) return;
+  bookingsList.innerHTML='';
+  breaksList.innerHTML='';
+  if(bookings.length===0) bookingsList.innerHTML='<div class="small">Нет записей</div>';
+  bookings.slice().sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time)).forEach(b=>{
+    const row=document.createElement('div'); row.className='booking-item';
+    const meta=document.createElement('div'); meta.className='meta'; meta.innerHTML=`<strong>${b.name}</strong><div class="small">${b.phone}</div><div class="small">${b.date} ${b.time} — ${b.service}</div>`;
+    const actions=document.createElement('div'); actions.className='booking-actions';
+    // remind
+    const remind=document.createElement('button'); remind.className='btn'; remind.style.background='#2575FC'; remind.textContent='Напомнить';
+    remind.addEventListener('click', ()=>{ notifyWhatsApp(b.phone, `Здравствуйте, ${b.name}! Напоминаем о вашей записи: ${b.service} ${b.date} ${b.time}`); alert('Напоминание отправлено клиенту'); });
+    // move
+    const mv = document.createElement('button'); mv.className='btn'; mv.style.background='#444'; mv.textContent='Перенести'; mv.addEventListener('click', ()=>openMoveModal(b.id));
+    // delete
+    const del = document.createElement('button'); del.className='btn'; del.style.background='#ff4d4d'; del.textContent='Удалить'; del.addEventListener('click', async ()=>{
+      if(!confirm('Удалить?')) return;
+      bookings = bookings.filter(x=>x.id!==b.id);
+      await syncSave('set_all', bookings);
+      notifyWhatsApp(b.phone, `Уважаемый ${b.name}, ваша запись ${b.service} ${b.date} ${b.time} была отменена.`);
+      renderAdmin(); renderCalendar(); renderSlots();
+    });
+    actions.appendChild(remind); actions.appendChild(mv); actions.appendChild(del);
+    row.appendChild(meta); row.appendChild(actions); bookingsList.appendChild(row);
+  });
+  if(breaks.length===0) breaksList.innerHTML='<div class="small">Нет перерывов</div>';
+  breaks.slice().sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start)).forEach(br=>{
+    const r=document.createElement('div'); r.className='booking-item'; r.style.display='flex'; r.style.justifyContent='space-between'; r.innerHTML=`<div><strong>${br.date}</strong><div class="small">${br.start} – ${br.end}</div></div>`;
+    const del=document.createElement('button'); del.className='btn'; del.style.background='#444'; del.textContent='Удалить'; del.addEventListener('click', async ()=>{ if(!confirm('Удалить перерыв?')) return; breaks = breaks.filter(x=>x.id!==br.id); await syncSave('set_all', bookings); renderAdmin(); renderCalendar(); renderSlots(); });
+    r.appendChild(del); breaksList.appendChild(r);
+  });
+}
+
+// Move modal helpers (existing modals used)
+let movingId = null;
+function openMoveModal(id){
+  movingId = id; document.getElementById('moveModal').classList.add('open');
+  const b = bookings.find(x=>x.id===id); if(b){ document.getElementById('moveDate').value = b.date; populateMoveTimes(b.date, b.duration); document.getElementById('moveTime').value = b.time; }
+}
+function populateMoveTimes(date, duration){
+  const sel = document.getElementById('moveTime'); sel.innerHTML = '';
+  const dow = new Date(date).getDay(); const sched = workSchedule[dow];
+  if(!sched){ sel.innerHTML = '<option>Выходной</option>'; return; }
+  for(let t=sched.start; t + Math.round(duration*60) <= sched.end; t+=30){
+    const time = minutesToTime(t);
+    const opt = document.createElement('option'); opt.value = time; opt.textContent = time;
+    if(!isAvailable(date, time, duration, movingId)){ opt.disabled = true; opt.textContent = time + ' (недоступно)'; }
+    sel.appendChild(opt);
+  }
+}
+
+document.getElementById('cancelMove').addEventListener('click', ()=>{ document.getElementById('moveModal').classList.remove('open'); movingId = null; });
+document.getElementById('confirmMove').addEventListener('click', async ()=>{
+  const b = bookings.find(x=>x.id===movingId); if(!b) return;
+  const nd = document.getElementById('moveDate').value; const nt = document.getElementById('moveTime').value;
+  if(!isAvailable(nd, nt, b.duration, movingId) && !isAdmin()){ alert('Недоступно'); return; }
+  b.date = nd; b.time = nt; await syncSave('set_all', bookings); renderAdmin(); renderCalendar(); renderSlots(); document.getElementById('moveModal').classList.remove('open'); movingId = null;
+  notifyWhatsApp(b.phone, 'Ваша запись перенесена на '+b.date+' '+b.time);
+});
+
+// Break modal handlers
+document.getElementById('cancelBreak').addEventListener('click', ()=>{ document.getElementById('breakModal').classList.remove('open'); });
+document.getElementById('saveBreak').addEventListener('click', async ()=>{
+  const d = document.getElementById('breakDate').value; const s = document.getElementById('breakStart').value; const e = document.getElementById('breakEnd').value;
+  if(!d||!s||!e){ alert('Заполните'); return; }
+  if(toMinutes(s) >= toMinutes(e)){ alert('Неверно'); return; }
+  // remove conflicting bookings
+  const conflict = bookings.some(b=>b.date===d && !(toMinutes(b.time)+b.duration*60 <= toMinutes(s) || toMinutes(b.time) >= toMinutes(e)));
+  if(conflict){ if(!confirm('Перерыв пересекается с записями. Удалить конфликтующие?')) return; bookings = bookings.filter(b=>!(b.date===d && !(toMinutes(b.time)+b.duration*60 <= toMinutes(s) || toMinutes(b.time) >= toMinutes(e)))); await syncSave('set_all', bookings); }
+  breaks.push({ id: Date.now(), date: d, start: s, end: e });
+  await syncSave('set_all', bookings);
+  document.getElementById('breakModal').classList.remove('open'); renderAdmin(); renderCalendar(); renderSlots();
+});
+
+// Holiday modal handlers
+document.getElementById('cancelHoliday').addEventListener('click', ()=>{ document.getElementById('holidayModal').classList.remove('open'); });
+document.getElementById('saveHoliday').addEventListener('click', async ()=>{
+  const d = document.getElementById('holidayDate').value; if(!d){ alert('Выберите дату'); return; }
+  if(holidays.includes(d)){ alert('Выходной уже добавлен'); return; }
+  holidays.push(d); await syncSave('set_all', bookings);
+  // move bookings on that date
+  const toMove = bookings.filter(b=>b.date===d);
+  toMove.forEach(b=>{
+    const newDate = findNextAvailable(b.date, b.time, b.duration);
+    if(newDate){ b.date = newDate; notifyWhatsApp(b.phone, 'Ваша запись перенесена на '+b.date+' '+b.time+'. Услуга: '+b.service); }
+  });
+  await syncSave('set_all', bookings); document.getElementById('holidayModal').classList.remove('open'); renderAdmin(); renderCalendar(); renderSlots();
+});
+
+function findNextAvailable(dateIso, timeStr, duration){
+  const start = new Date(dateIso);
+  for(let i=1;i<=30;i++){
+    const d = new Date(start); d.setDate(start.getDate()+i);
+    const iso = localIso(d);
+    const dow = d.getDay();
+    const sched = workSchedule[dow];
+    if(!sched) continue;
+    if(isAvailable(iso, timeStr, duration)) return iso;
+  }
+  return null;
+}
+
+// Admin add booking modal (allows adding on off-days/breaks)
+function openAdminAddModal(){
+  let modal = document.getElementById('adminAddModal');
+  if(!modal){
+    modal = document.createElement('div'); modal.className='modal'; modal.id='adminAddModal';
+    modal.innerHTML = `<div class="box"><h4>Добавить запись (админ)</h4>
+      <input id="adm_name" placeholder="Имя" /><input id="adm_phone" placeholder="Телефон" /><select id="adm_service">${[...serviceEl.options].map(o=>`<option value="${o.value}" data-duration="${o.dataset.duration}">${o.textContent}</option>`).join('')}</select>
+      <input id="adm_date" type="date" /><input id="adm_time" type="time" />
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px"><button id="adm_save" class="btn">Добавить</button><button id="adm_cancel" class="btn" style="background:#444">Отмена</button></div></div>`;
+    document.body.appendChild(modal);
+    document.getElementById('adm_cancel').addEventListener('click', ()=>{ modal.classList.remove('open'); });
+    document.getElementById('adm_save').addEventListener('click', async ()=>{
+      const name = document.getElementById('adm_name').value.trim(); const phone = document.getElementById('adm_phone').value.trim(); const service = document.getElementById('adm_service').value; const date = document.getElementById('adm_date').value; const time = document.getElementById('adm_time').value;
+      if(!name||!phone||!service||!date||!time){ alert('Заполните все поля'); return; }
+      const dur = parseFloat(document.getElementById('adm_service').selectedOptions[0].dataset.duration||'1');
+      // check conflicts
+      if(!isAvailable(date, time, dur)){
+        if(!confirm('Слот занят или конфликтует. Всё равно добавить?')) return;
+      }
+      const b = { id: Date.now(), date, time, name, phone, service, duration: dur };
+      bookings.push(b); await syncSave('set_all', bookings); renderAdmin(); renderCalendar(); renderSlots(); modal.classList.remove('open'); alert('Добавлено'); notifyWhatsApp(phone, `Ваша запись добавлена: ${service} ${date} ${time}`);
+    });
+  }
+  modal.classList.add('open');
+}
+
+// Hook admin "Добавить запись" button if exists in panel
+const addAdminBookingBtn = document.getElementById('addAdminBookingBtn');
+if(addAdminBookingBtn) addAdminBookingBtn.addEventListener('click', ()=>{ if(!isAdmin()){ alert('Требуется вход админа'); return; } openAdminAddModal(); });
+
+// Initial render and bindings
+prevBtn.addEventListener('click', ()=>{ current.setMonth(current.getMonth()-1); renderCalendar(); });
+nextBtn.addEventListener('click', ()=>{ current.setMonth(current.getMonth()+1); renderCalendar(); });
+
+// login logic already in page: ensure renderAdmin called on login
+const loginBtn = document.getElementById('loginBtn');
+if(loginBtn) loginBtn.addEventListener('click', ()=>{ const adminPassword = document.getElementById('adminPassword'); if(adminPassword && adminPassword.value==='andron18'){ sessionStorage.setItem('isAdmin','true'); document.getElementById('loginBox').style.display='none'; document.getElementById('adminContent').style.display='block'; renderAdmin(); adminPassword.value=''; } else { document.getElementById('loginError').style.display='block'; } });
+
+// logout
+const logoutBtn = document.getElementById('logoutBtn');
+if(logoutBtn) logoutBtn.addEventListener('click', ()=>{ sessionStorage.removeItem('isAdmin'); document.getElementById('loginBox').style.display='block'; document.getElementById('adminContent').style.display='none'; alert('Выход'); document.getElementById('adminPanel').classList.remove('open'); });
+
+// notifyWhatsApp helper (keeps previous behavior)
+function notifyWhatsApp(phone, text){
+  try{
+    if(!phone) return;
+    const cleaned = phone.replace(/\D/g,'');
+    const url = 'https://wa.me/' + cleaned + '?text=' + encodeURIComponent(text);
+    const w = window.open(url, '_blank');
+    if(!w) window.location.href = url;
+  }catch(e){ console.warn('WA error', e); }
+}
+
+// initial render
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderCalendar();
+  renderSlots();
+  renderAdmin();
+});
+</script>
+
+<script>
+/* Added script: show price + duration modal; re-render slots when service changes; close modal on slot selection */
+(function(){
+  try{
+    const serviceEl = document.getElementById('service');
+    const priceModal = document.getElementById('priceModal');
+    const priceText = document.getElementById('priceText');
+    const closePrice = document.getElementById('closePrice');
+    const slotsEl = document.getElementById('slots');
+
+    if(!serviceEl) return;
+
+    serviceEl.addEventListener('change', ()=>{
+      const opt = serviceEl.selectedOptions[0];
+      if(opt && opt.dataset.price && opt.dataset.duration){
+        const dur = parseFloat(opt.dataset.duration);
+        const hours = Math.floor(dur);
+        const minutes = Math.round((dur - hours) * 60);
+        let durText = '';
+        if(hours) durText += hours + ' ч';
+        if(minutes) durText += (durText ? ' ' : '') + minutes + ' мин';
+        priceText.innerHTML = 'Цена: <strong>' + opt.dataset.price + ' р</strong><br>Длительность: <strong>' + durText + '</strong>';
+        if(priceModal) priceModal.style.display = 'flex';
+        // reset any previously selected time so user picks a slot for new duration
+        if(typeof selectedTime !== 'undefined') selectedTime = null;
+        if(typeof renderSlots === 'function') renderSlots();
+        // scroll to slots to help mobile users
+        const calendar = document.getElementById('calendar');
+        const slots = document.getElementById('slots');
+        if(slots) slots.scrollIntoView({behavior:'smooth', block:'start'});
       }
     });
-  </script>
+
+    if(closePrice){
+      closePrice.addEventListener('click', ()=>{
+        if(priceModal) priceModal.style.display = 'none';
+      });
+    }
+
+    // close price modal when user clicks an available slot (delegation)
+    if(slotsEl){
+      slotsEl.addEventListener('click', (e)=>{
+        const target = e.target;
+        if(target && target.classList && target.classList.contains('slot') && !target.classList.contains('booked') && !target.classList.contains('past')){
+          if(priceModal) priceModal.style.display = 'none';
+        }
+      });
+    }
+
+  }catch(err){
+    console.warn('Price modal helper error', err);
+  }
+})();
+</script>
+
+
+
+</div>
+  </div>
+
+<script>
+(function(){
+  const select = document.getElementById('service');
+  if(!select) return;
+  const servicesList = document.getElementById('services-list');
+  const categoryBtns = document.querySelectorAll('.category-btn');
+  // build map: label -> options
+  const map = {};
+  Array.from(select.querySelectorAll('optgroup')).forEach(og=>{
+    const label = og.label || 'Прочее';
+    map[label] = Array.from(og.querySelectorAll('option')).map(opt=>({value:opt.value,price:opt.dataset.price,duration:opt.dataset.duration,text:opt.textContent}));
+  });
+  if(Object.keys(map).length===0){
+    map['Услуги'] = Array.from(select.querySelectorAll('option')).map(opt=>({value:opt.value,price:opt.dataset.price,duration:opt.dataset.duration,text:opt.textContent}));
+  }
+  function renderCategory(label){
+    servicesList.innerHTML='';
+    const items=map[label]||[];
+    if(items.length===0){servicesList.innerHTML='<div class="small">Услуг нет</div>';servicesList.style.display='block';return;}
+    items.forEach(it=>{
+      const b=document.createElement('button');
+      b.type='button';b.className='service-btn';
+      b.innerHTML=it.text+(it.price?(' <small>Цена: '+it.price+' р • '+(it.duration?it.duration+' ч':'')+'</small>'):''); 
+      b.dataset.value=it.value;b.dataset.price=it.price;b.dataset.duration=it.duration;
+      b.addEventListener('click',()=>{
+        select.value=it.value;
+        const ev=new Event('change',{bubbles:true});
+        select.dispatchEvent(ev);
+      });
+      servicesList.appendChild(b);
+    });
+    servicesList.style.display='flex';
+  }
+  categoryBtns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      renderCategory(btn.dataset.cat);
+    });
+  });
+})();
+</script>
+
+
+<style>
+  #calendar .day.selected {
+    background-color: #4caf50;
+    color: #fff;
+    border-radius: 4px;
+  }
+  .slots-grid .slot.selected {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  #confirmBtn, button.confirm-btn, button[type="submit"] {
+    background-color: #4caf50 !important;
+    color: #fff !important;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Улучшенная функция showServices: фиксирует значение select, подсвечивает выбранную услугу и не обнуляет время если не нужно
+(function(){
+  const serviceEl = document.getElementById('service');
+  const servicesList = document.getElementById('services-list');
+  if(!serviceEl || !servicesList) return;
+
+  function markActiveButton(value){
+    servicesList.querySelectorAll('.service-btn').forEach(b=>{
+      b.classList.toggle('selected', b.dataset.value === value);
+    });
+  }
+
+  function showServices(category){
+    servicesList.innerHTML = '';
+    servicesList.style.display = 'flex';
+    const options = serviceEl.querySelectorAll(`optgroup[label="${category}"] option`);
+    options.forEach(opt=>{
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'service-btn';
+      btn.dataset.value = opt.value;
+      btn.dataset.duration = opt.dataset.duration;
+      btn.textContent = opt.textContent;
+      if(serviceEl.value === opt.value) btn.classList.add('selected');
+      btn.addEventListener('click',()=>{
+        // фиксируем выбранную услугу
+        const prevService = serviceEl.value;
+        serviceEl.value = btn.dataset.value;
+        // если пользователь меняет услугу на другую — сбрасываем выбранное время
+        if(prevService !== serviceEl.value) {
+          selectedTime = null;
+        }
+        markActiveButton(serviceEl.value);
+        renderSlots();
+      });
+      servicesList.appendChild(btn);
+    });
+    // подсветить активную кнопку если есть
+    markActiveButton(serviceEl.value);
+  }
+
+  document.querySelectorAll('.category-btn').forEach(btn=>{
+    btn.addEventListener('click',()=> showServices(btn.dataset.cat));
+  });
+
+  // expose for debugging
+  window.showServices = showServices;
+})();</script>
+
+
+
+<script>
+(function(){
+  const adminPanel = document.getElementById('adminPanel');
+  const calendarEl = document.getElementById('calendar');
+  const addHolidayBtn = document.getElementById('addHolidayBtn');
+  const addBreakBtn = document.getElementById('addBreakBtn');
+  const holidayModal = document.getElementById('holidayModal');
+  const breakModal = document.getElementById('breakModal');
+  // swipe to open admin (swipe left on calendar)
+  if(calendarEl && adminPanel){
+    let startX = 0, startY = 0;
+    calendarEl.addEventListener('touchstart', (e)=>{
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+    }, {passive:true});
+    calendarEl.addEventListener('touchend', (e)=>{
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if(dx < -60 && Math.abs(dy) < 60){
+        adminPanel.classList.add('open');
+        adminPanel.setAttribute('aria-hidden','false');
+      } else if (dx > 60 && Math.abs(dy) < 60){
+        // swipe right closes
+        adminPanel.classList.remove('open');
+        adminPanel.setAttribute('aria-hidden','true');
+      }
+    }, {passive:true});
+    // desktop: allow double-click on calendar to toggle panel (fallback)
+    calendarEl.addEventListener('dblclick', ()=>{
+      adminPanel.classList.toggle('open');
+      const open = adminPanel.classList.contains('open');
+      adminPanel.setAttribute('aria-hidden', String(!open));
+    });
+  }
+
+  // Bind addHolidayBtn and addBreakBtn to modals (only if admin)
+  function openIfAdmin(modal){
+    if(!sessionStorage.getItem('isAdmin')){ alert('Требуется вход админа'); return; }
+    if(modal) modal.classList.add('open');
+  }
+  if(addHolidayBtn) addHolidayBtn.addEventListener('click', ()=> openIfAdmin(holidayModal));
+  if(addBreakBtn) addBreakBtn.addEventListener('click', ()=> openIfAdmin(breakModal));
+
+  // make admin panel draggable to close (small handle)
+  // close when click outside panel
+  document.addEventListener('click', (e)=>{
+    if(!adminPanel) return;
+    if(!adminPanel.classList.contains('open')) return;
+    if(adminPanel.contains(e.target)) return;
+    adminPanel.classList.remove('open');
+    adminPanel.setAttribute('aria-hidden','true');
+  });
+})();
+
+// === Added by GPT for service button selection + swipe admin panel ===
+(function(){
+  // подсветка выбранной услуги
+  const serviceEl = document.getElementById('service');
+  document.addEventListener('click',function(e){
+    if(e.target.classList.contains('service-btn')){
+      document.querySelectorAll('.service-btn').forEach(b=>b.classList.remove('selected'));
+      e.target.classList.add('selected');
+      serviceEl.value = e.target.dataset.value || e.target.textContent.trim();
+      if(typeof renderSlots==='function') renderSlots();
+    }
+  });
+  // свайп для открытия/закрытия админ панели по графику работы
+  let touchStartX=null;
+  const schedBlock=document.getElementById('scheduleBlock');
+  if(schedBlock){
+    schedBlock.addEventListener('touchstart',e=>{
+      touchStartX=e.changedTouches[0].clientX;
+    });
+    schedBlock.addEventListener('touchend',e=>{
+      if(touchStartX!==null){
+        const dx=e.changedTouches[0].clientX-touchStartX;
+        if(dx< -50){ document.getElementById('adminPanel').classList.add('open'); }
+        if(dx>50){ document.getElementById('adminPanel').classList.remove('open'); }
+        touchStartX=null;
+      }
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
