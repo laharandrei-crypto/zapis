@@ -1,2664 +1,531 @@
-<!DOCTYPE html>
 
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Парикмахер Татьяна Ляхар - Запись онлайн</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Запись — тёмная версия</title>
 <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #8A2BE2;
-            --primary-dark: #6A11CB;
-            --secondary: #2575FC;
-            --accent: #FF6B6B;
-            --light: #f9f7f7;
-            --dark: #333;
-            --gray: #ddd;
-            --success: #4CAF50;
-            --warning: #FFA726;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-            overflow-x: hidden;
-            font-size: 14px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,100 L0,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
-            background-size: cover;
-        }
-        
-        .profile-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .profile-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            margin-bottom: 0.5rem;
-            transition: var(--transition);
-        }
-        
-        .profile-image:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 10px;
-        }
-        
-        h1 {
-            font-size: 1.4rem;
-            margin-bottom: 0.3rem;
-            font-weight: 600;
-        }
-        
-        .subtitle {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-        
-        /* Панель администратора */
-        .admin-panel {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            box-shadow: var(--shadow);
-            display: none;
-            animation: fadeIn 0.5s ease;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .admin-panel h3 {
-            margin-bottom: 10px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1.1rem;
-        }
-        
-        .admin-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        
-        .admin-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            flex: 1;
-            min-width: 120px;
-            justify-content: center;
-        }
-        
-        .admin-btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Доступ к панели администратора */
-        .admin-access {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            box-shadow: var(--shadow);
-            text-align: center;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .admin-access h3 {
-            margin-bottom: 10px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 1.1rem;
-        }
-        
-        .password-input {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 10px;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .password-input input {
-            padding: 8px 12px;
-            border: 1px solid var(--gray);
-            border-radius: 6px;
-            width: 100%;
-            max-width: 250px;
-            transition: var(--transition);
-            font-size: 0.9rem;
-        }
-        
-        .password-input input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
-        }
-        
-        .booking-section {
-            padding: 1.5rem 0;
-            background-color: var(--light);
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.4rem;
-            color: var(--dark);
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0 10px;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-        
-        .calendar-container {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 15px;
-            transition: var(--transition);
-        }
-        
-        .calendar-container:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .calendar-header button {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--primary);
-            padding: 6px 10px;
-            border-radius: 6px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .calendar-header button:hover {
-            background: #f0f0f0;
-            transform: scale(1.1);
-        }
-        
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-        
-        .calendar-day-header {
-            text-align: center;
-            font-weight: 600;
-            color: #666;
-            padding: 8px 0;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .calendar-day {
-            text-align: center;
-            padding: 8px 0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            font-size: 0.8rem;
-            user-select: none;
-            border: 1px solid transparent;
-            min-height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .calendar-day:hover {
-            background: #f0f0f0;
-            transform: translateY(-1px);
-        }
-        
-        .calendar-day.selected {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
-            color: white;
-            transform: scale(1.03);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .calendar-day.other-month {
-            color: #ccc;
-            opacity: 0.5;
-        }
-        
-        .calendar-day.booked {
-            background-color: var(--accent);
-            color: white;
-        }
-        
-        .calendar-day.booked::after {
-            content: "✓";
-            position: absolute;
-            top: 3px;
-            right: 3px;
-            font-size: 8px;
-        }
-        
-        .calendar-day.break-day {
-            background-color: var(--warning);
-            color: #333;
-        }
-        
-        .calendar-day.break-day::after {
-            content: "⏸";
-            position: absolute;
-            top: 3px;
-            right: 3px;
-            font-size: 8px;
-        }
-        
-        .calendar-day.today {
-            border: 1px solid var(--primary);
-        }
-        
-        .client-name {
-            font-size: 0.6rem;
-            margin-top: 2px;
-            font-weight: 500;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 100%;
-            display: none;
-        }
-        
-        .calendar-day.booked .client-name {
-            display: block;
-        }
-        
-        .time-slots {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 15px;
-            transition: var(--transition);
-        }
-        
-        .time-slots:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        }
-        
-        .time-slots h3 {
-            margin-bottom: 10px;
-            color: var(--dark);
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .time-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 8px;
-            margin-bottom: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding: 3px;
-        }
-        
-        .time-slot {
-            padding: 10px;
-            text-align: center;
-            background: #f0f0f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.8rem;
-            position: relative;
-            user-select: none;
-            border: 1px solid transparent;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .time-slot:hover {
-            background: #e0e0e0;
-            transform: translateY(-1px);
-        }
-        
-        .time-slot.selected {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
-            color: white;
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .time-slot.booked {
-            background-color: var(--accent);
-            color: white;
-            cursor: not-allowed;
-        }
-        
-        .time-slot.break {
-            background-color: var(--warning);
-            color: #333;
-            cursor: not-allowed;
-        }
-        
-        .time-slot.break::after {
-            content: "⏸";
-            position: absolute;
-            top: 3px;
-            right: 3px;
-            font-size: 8px;
-        }
-
-        /* Новые стили для блокировки времени */
-        .time-slot.blocked {
-            background-color: #ffcccc;
-            color: #666;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        
-        .time-slot.blocked::after {
-            content: "✗";
-            position: absolute;
-            top: 3px;
-            right: 3px;
-            font-size: 8px;
-        }
-        
-        /* Стили для групповых записей (один клиент на несколько часов) */
-        .time-slot.booking-group {
-            background: linear-gradient(135deg, #6A11CB 0%, #2575FC 100%);
-            color: white;
-            position: relative;
-            border: 2px solid #4A0D9B;
-        }
-        
-        .time-slot.booking-group-start {
-            border-radius: 8px 0 0 8px;
-            border-right: none;
-        }
-        
-        .time-slot.booking-group-middle {
-            border-radius: 0;
-            border-left: none;
-            border-right: none;
-        }
-        
-        .time-slot.booking-group-end {
-            border-radius: 0 8px 8px 0;
-            border-left: none;
-        }
-        
-        .calendar-day.booking-group-day {
-            position: relative;
-            overflow: visible;
-        }
-        
-        .calendar-day.booking-group-day::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 0 0 8px 8px;
-        }
-        
-        .time-slot .client-name {
-            font-size: 0.7rem;
-            margin-top: 3px;
-            display: block;
-        }
-        
-        .booking-form {
-            margin-top: 15px;
-            display: none;
-            animation: slideDown 0.5s ease;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-            position: relative;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            color: var(--dark);
-        }
-        
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-        
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
-        }
-        
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            text-align: center;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(-1px);
-        }
-        
-        .bookings-list {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: var(--shadow);
-            margin-top: 15px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .bookings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--gray);
-        }
-        
-        .bookings-header h4 {
-            margin: 0;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-        }
-        
-        .select-all {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.8rem;
-        }
-        
-        .booking-item {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition);
-            border-radius: 6px;
-            margin-bottom: 5px;
-        }
-        
-        .booking-item:hover {
-            background: #f9f9f9;
-            transform: translateX(3px);
-        }
-        
-        .booking-item:last-child {
-            border-bottom: none;
-        }
-        
-        .booking-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        
-        .booking-checkbox {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
-        }
-        
-        .booking-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-        }
-        
-        .delete-btn, .cancel-btn, .move-btn, .edit-btn {
-            padding: 6px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-            font-size: 0.7rem;
-            font-weight: 500;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            flex: 1;
-            min-width: 80px;
-            justify-content: center;
-        }
-        
-        .delete-btn {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .cancel-btn {
-            background: var(--warning);
-            color: white;
-        }
-        
-        .move-btn {
-            background: var(--success);
-            color: white;
-        }
-        
-        .edit-btn {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .delete-btn:hover, .cancel-btn:hover, .move-btn:hover, .edit-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 1.5rem 0;
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.8rem;
-        }
-        
-        .contact-info {
-            margin-bottom: 1rem;
-        }
-        
-        .contact-info p {
-            margin-bottom: 0.3rem;
-        }
-        
-        .social-links {
-            margin-top: 0.8rem;
-        }
-        
-        .social-links a {
-            color: white;
-            margin: 0 8px;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            display: inline-block;
-        }
-        
-        .social-links a:hover {
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
-        
-        .copyright {
-            margin-top: 1rem;
-            padding-top: 0.8rem;
-            border-top: 1px solid #444;
-            color: #aaa;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-            padding: 10px;
-        }
-        
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.3s ease;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        /* Стили для модального окна переноса */
-        .move-modal-content {
-            max-width: 500px;
-        }
-        
-        .date-time-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .date-selector, .time-selector {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .available-slots {
-            margin-top: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            padding: 10px;
-        }
-        
-        .slot-option {
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .slot-option:hover {
-            background: #f0f0f0;
-        }
-        
-        .slot-option.selected {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .slot-option.unavailable {
-            background: #ffcccc;
-            color: #666;
-            cursor: not-allowed;
-        }
-        
-        .modal h3 {
-            margin-bottom: 10px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1.1rem;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .long-press-notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            z-index: 1001;
-            display: none;
-            animation: fadeIn 0.3s ease;
-            font-size: 0.9rem;
-        }
-        
-        .admin-actions-panel {
-            position: fixed;
-            background: white;
-            border-radius: 10px;
-            padding: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            z-index: 999;
-            display: none;
-            flex-direction: column;
-            gap: 8px;
-            animation: slideUp 0.3s ease;
-            min-width: 200px;
-            border: 1px solid #ddd;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        .admin-action-btn {
-            padding: 10px 12px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
-            font-weight: 500;
-            font-size: 0.85rem;
-            justify-content: flex-start;
-            white-space: nowrap;
-            width: 100%;
-        }
-        
-        .admin-action-btn i {
-            font-size: 0.8rem;
-            width: 16px;
-        }
-                
-        .admin-action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .admin-action-btn.delete {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .admin-action-btn.edit {
-            background: var(--warning);
-            color: white;
-        }
-        
-        .admin-action-btn.break {
-            background: var(--success);
-            color: white;
-        }
-        
-        .admin-action-btn.notify {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* Стили для списка перерывов */
-        .breaks-list {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: var(--shadow);
-            margin-top: 15px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .break-item {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition);
-            border-radius: 6px;
-            margin-bottom: 5px;
-        }
-        
-        .break-item:hover {
-            background: #f9f9f9;
-            transform: translateX(3px);
-        }
-        
-        .break-item:last-child {
-            border-bottom: none;
-        }
-        
-        .break-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        
-        .break-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-        }
-        
-        /* Анимации */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideDown {
-            from { 
-                opacity: 0;
-                transform: translateY(-15px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .calendar-grid {
-                gap: 3px;
-            }
-            
-            .calendar-day {
-                padding: 6px 0;
-                font-size: 0.7rem;
-                min-height: 30px;
-            }
-            
-            .time-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .booking-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .booking-info {
-                width: 100%;
-                margin-bottom: 8px;
-            }
-            
-            .booking-actions {
-                margin-top: 8px;
-                width: 100%;
-                justify-content: flex-end;
-            }
-            
-            .password-input {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .password-input input {
-                width: 100%;
-                max-width: 250px;
-            }
-            
-            .admin-controls {
-                flex-direction: column;
-            }
-            
-            .admin-btn {
-                min-width: auto;
-            }
-            
-            .admin-actions-panel {
-                min-width: 180px;
-                padding: 10px;
-            }
-            
-            .admin-action-btn {
-                padding: 8px 10px;
-                font-size: 0.8rem;
-            }
-
-            .date-time-selector {
-                flex-direction: column;
-            }
-            
-            .date-selector, .time-selector {
-                min-width: 100%;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .time-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .calendar-day-header {
-                font-size: 0.7rem;
-            }
-            
-            .calendar-day {
-                font-size: 0.65rem;
-                padding: 5px 0;
-                min-height: 25px;
-            }
-            
-            h1 {
-                font-size: 1.2rem;
-            }
-            
-            .section-title {
-                font-size: 1.2rem;
-            }
-            
-            .modal-content {
-                padding: 15px;
-            }
-            
-            .modal-buttons {
-                flex-direction: column;
-            }
-            
-            .admin-btn, .delete-btn, .cancel-btn, .move-btn, .edit-btn {
-                font-size: 0.7rem;
-                padding: 6px 8px;
-            }
-            
-            .admin-actions-panel {
-                min-width: 160px;
-                padding: 8px;
-            }
-            
-            .admin-action-btn {
-                padding: 6px 8px;
-                font-size: 0.75rem;
-            }
-        }
-    
-.off-day {
-  background-color: #ffcccc !important;
-  color: #a00 !important;
+:root{
+  --bg:#0f0f13; --card:#17171b; --muted:#9aa0a6;
+  --accent1:#6A11CB; --accent2:#2575FC; --orange:#ffa500; --danger:#ff6b6b;
+  --text:#eaf0f6;
 }
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#08080a,var(--bg));color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.container{max-width:980px;margin:18px auto;padding:12px;display:grid;grid-template-columns:1fr 360px;gap:12px}
+
+.card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 8px 30px rgba(0,0,0,.6);transition:transform .18s;overflow:hidden}
+.card:active{transform:scale(.997)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.header h3{margin:0;font-size:18px}
+.controls button{background:transparent;border:none;color:var(--muted);font-size:20px;padding:6px;cursor:pointer;border-radius:8px}
+.controls button:active{transform:scale(.96)}
+
+/* calendar grid */
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:10px}
+.dow{font-size:12px;color:var(--muted);text-align:center;font-weight:600;text-transform:uppercase}
+.day{padding:10px;border-radius:10px;text-align:center;cursor:pointer;min-height:56px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;color:var(--text)}
+.day.today{box-shadow:0 0 0 2px rgba(255,255,255,.03) inset}
+.day.booked{box-shadow:inset 0 -6px 0 rgba(255,165,0,.05)}
+.day.selected{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff}
+
+/* slots */
+.slots-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+.slot{background:#232328;color:var(--orange);font-size:18px;font-weight:600;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+.slot:hover{transform:scale(1.04)}
+.slot.booked{background:var(--danger);color:#fff;cursor:not-allowed;opacity:0.95}
+.slot.past{opacity:.45;cursor:not-allowed}
+.slot.selected{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff}
+
+/* form */
+form input, form select, form button{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,0.02);color:var(--text);margin-top:10px;font-size:16px}
+form button{background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;color:#fff;font-weight:600;cursor:pointer}
+
+/* right column */
+.profile{display:flex;gap:12px;align-items:center}
+.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.06);box-shadow:0 8px 20px rgba(0,0,0,.6)}
+.info h4{margin:0 0 6px 0}
+.info p{margin:0;color:var(--muted)}
+
+/* admin panel */
+.admin-panel{position:fixed;top:16px;right:12px;width:420px;height:82vh;transform:translateX(110%);transition:transform .28s cubic-bezier(.2,.9,.2,1);z-index:1200;border-radius:12px;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.7);background:linear-gradient(180deg,#0f1114,#141416)}
+.admin-panel.open{transform:translateX(0)}
+.admin-panel .pad{padding:14px}
+.btn{display:inline-block;padding:10px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;cursor:pointer;font-weight:600}
+.small{font-size:13px;color:var(--muted)}
+
+/* modals */
+.modal{display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:1300}
+.modal.open{display:flex}
+.modal .box{background:#0c0c0f;padding:16px;border-radius:12px;width:420px;max-width:92%}
+
+/* responsive */
+@media (max-width:980px){.container{grid-template-columns:1fr;} .avatar{width:80px;height:80px} .slots-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* weekend highlight */
+.day.weekend{background:linear-gradient(180deg, rgba(255,40,40,0.06), rgba(255,40,40,0.02)); color:#ff6b6b; border:1px solid rgba(255,40,40,0.06);}
+.info a{display:block;padding:10px 12px;margin-top:6px;border:1px solid rgba(255,255,255,0.04);border-radius:10px;background:rgba(255,255,255,0.01);font-size:16px;text-decoration:none}
+.info span{display:block;padding:10px 12px;margin-top:6px;border:1px solid rgba(255,255,255,0.04);border-radius:10px;background:rgba(255,255,255,0.01);font-size:16px}
 
 
-/* Красивый стиль кнопки */
-#setDayOffBtn {
-  background: linear-gradient(135deg, #ff5f6d, #ffc371);
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin-top: 6px;
-}
-#setDayOffBtn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
+/* brand colors for links */
+.info a.instagram{color:#C13584!important;}
+.info a.whatsapp{color:#25D366!important;}
+.info a.viber{color:#7360f2!important;}
+.info a.vk{color:#0077FF!important;}
+.info a.yandex{color:#FF0000!important;}
 
-/* Анимация для выходных дней */
-.off-day {
-  background-color: #ffcccc !important;
-  color: #a00 !important;
-  animation: fadein 0.8s ease-in-out;
-}
-@keyframes fadein {
-  from {background-color: #fff;}
-  to {background-color: #ffcccc;}
-}
 
-/* Лёгкая тень ячеек календаря */
-.calendar-day {
-  transition: box-shadow 0.2s, transform 0.2s;
-}
-.calendar-day:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transform: scale(1.02);
+/* Mobile admin panel: full screen and slide from bottom */
+@media (max-width:600px){
+  .admin-panel{left:0;right:0;top:auto;bottom:0;width:100%;height:100vh;border-radius:12px 12px 0 0;transform:translateY(110%);transition:transform .28s cubic-bezier(.2,.9,.2,1);}
+  .admin-panel.open{transform:translateY(0);}
+  /* ensure it overlays properly */
+  body.modal-open{overflow:hidden;height:100vh;}
 }
 
 </style>
 </head>
 <body>
-<header>
+
 <div class="container">
-<div class="profile-container">
-<img alt="Татьяна Ляхар" class="profile-image" src="https://i.ibb.co/3541jL4Z/image.jpg"/>
-<h1>Татьяна Ляхар</h1>
-<p class="subtitle">Профессиональный парикмахер-стилист</p>
-</div>
-</div>
-</header>
-<div class="container">
-<!-- Панель администратора -->
-<div class="admin-panel" id="admin-panel">
-<h3><i class="fas fa-user-shield"></i> Панель администратора</h3>
-<div class="admin-controls">
-<button class="admin-btn" id="view-bookings"><i class="fas fa-calendar-alt"></i> Просмотреть записи</button>
-<button class="admin-btn" id="view-breaks"><i class="fas fa-coffee"></i> Просмотреть перерывы</button>
-<button class="admin-btn" id="add-break"><i class="fas fa-plus"></i> Добавить перерыв</button>
-<button class="admin-btn" id="delete-selected"><i class="fas fa-trash"></i> Удалить выбранные</button>
-<button class="admin-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Выйти</button>
-</div>
-<div class="bookings-list" id="bookings-list">
-<!-- Список записей будет загружен здесь -->
-</div>
-<div class="breaks-list" id="breaks-list">
-<!-- Список перерывов будет загружен здесь -->
-</div>
-</div>
-<section class="booking-section">
-<h2 class="section-title">Запись на ко мне</h2>
-<div class="calendar-container">
-<div class="calendar-header">
-<button id="prev-month"><i class="fas fa-chevron-left"></i></button>
-<h3 id="current-month">Май 2023</h3>
-<button id="next-month"><i class="fas fa-chevron-right"></i></button>
-</div>
-<div class="calendar-grid" id="calendar">
-<!-- Календарь будет сгенерирован JavaScript -->
-</div>
-</div>
-<div class="time-slots">
-<h3><i class="far fa-clock"></i> Выберите время</h3>
-<div class="time-grid" id="time-slots">
-<!-- Временные слоты будут сгенерированы JavaScript -->
-</div>
-<div class="booking-form" id="booking-form">
-<h3><i class="fas fa-edit"></i> Заполните данные</h3>
-<form id="appointment-form">
-<div class="form-group">
-<label for="name">Ваше имя</label>
-<input id="name" required="" type="text"/>
-</div>
-<div class="form-group">
-<label for="phone">Телефон</label>
-<input id="phone" required="" type="tel"/>
-</div>
-<div class="form-group">
-<label for="service">Услуга</label>
-<select id="service" required="">
-<option value="">Выберите услугу</option>
-<option data-duration="1" value="стрижка">Стрижка (1 час)</option>
-<option data-duration="3" value="окрашивание">Окрашивание (3 часа)</option>
-<option data-duration="2" value="укладка">Укладка (2 часа)</option>
-<option data-duration="2" value="прическа">Вечерняя прическа (2 часа)</option>
-<option data-duration="1" value="консультация">Консультация (1 час)</option>
-</select>
-</div>
-<button class="btn" type="submit"><i class="fas fa-check"></i> Подтвердить запись</button>
-</form>
-</div>
-</div>
-</section>
-<!-- Доступ к панели администратора -->
-<div class="admin-access" id="admin-access">
-<h3><i class="fas fa-lock"></i> Доступ к панели администратора</h3>
-<div class="password-input">
-<input id="admin-password" placeholder="Введите пароль" type="password"/>
-<button class="admin-btn" id="login-btn"><i class="fas fa-sign-in-alt"></i> Войти</button>
-</div>
-<p id="password-error" style="color: red; display: none;">Неверный пароль</p>
-</div>
-</div>
-<!-- Панель действий администратора -->
-<div class="admin-actions-panel" id="admin-actions-panel">
-<button class="admin-action-btn edit" id="admin-edit"><i class="fas fa-edit"></i> Записать клиента</button>
-<button class="admin-action-btn break" id="admin-break"><i class="fas fa-coffee"></i> Добавить перерыв</button>
-<button class="admin-action-btn delete" id="admin-delete"><i class="fas fa-trash"></i> Удалить записи</button>
-<button class="admin-action-btn notify" id="admin-notify"><i class="fas fa-bell"></i> Оповестить клиента</button>
-</div>
-<!-- Уведомление о долгом нажатии -->
-<div class="long-press-notification" id="long-press-notification">
-        Удерживайте для действий администратора
+  <div class="left">
+    <div class="card">
+      <div class="header">
+        <div class="controls">
+          <button id="prev" aria-label="prev">‹</button>
+        </div>
+        <h3 id="month">—</h3>
+        <div class="controls"><button id="next" aria-label="next">›</button></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
+          <strong>Календарь</strong>
+          <span class="small">Пн — выходной</span>
+        </div>
+        <div id="calendar" class="grid" style="margin-top:10px"></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <strong>Выберите время</strong>
+        <div id="slots" class="slots-grid"></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <strong>Запись</strong>
+        <form id="form">
+          <select id="service" required>
+            <option value="">Выберите услугу</option>
+            <option value="Стрижка" data-duration="1">Стрижка — 1 час</option>
+            <option value="Окрашивание" data-duration="3">Окрашивание — 3 часа</option>
+            <option value="Укладка" data-duration="2">Укладка — 2 часа</option>
+            <option value="Вечерняя прическа" data-duration="2">Вечерняя прическа — 2 часа</option>
+            <option value="Консультация" data-duration="1">Консультация — 1 час</option>
+          </select>
+          <input id="name" placeholder="Ваше имя" required />
+          <input id="phone" placeholder="Телефон (+375...)" required />
+          <button type="submit">Подтвердить</button>
+        </form>
+      </div>
     </div>
-<!-- Модальные окна -->
-<div class="modal" id="cancel-modal">
-<div class="modal-content">
-<h3><i class="fas fa-times-circle"></i> Отмена записи</h3>
-<p>Вы действительно хотите отменить эту запись?</p>
-<div class="form-group">
-<label for="cancel-reason">Причина отмены (необязательно):</label>
-<input id="cancel-reason" placeholder="Например: непредвиденные обстоятельства" type="text"/>
+  </div>
+
+  <div class="right">
+    <div class="card profile">
+      <img class="avatar" id="avatar" src=data:image/jpeg;base64,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 alt="Татьяна" />
+      
+<div class="info">
+    <h4>Татьяна Ляхар</h4>
+    <p class="small">Профессиональный парикмахер-стилист</p>
+    <div class="small" style="display:flex;flex-direction:column;gap:4px">
+      <span style="color:var(--orange);">+375 29 788-82-80</span>
+      <a  href="https://www.instagram.com/tatianaliakhar" class="instagram" target="_blank">Instagram</a>
+      <a  href="https://wa.me/375297888280" class="whatsapp" target="_blank">WhatsApp</a>
+      <a  href="viber://chat?number=%2B375297888280" class="viber" target="_blank">Viber</a>
+      <a  href="https://vk.com/id39250640" class="vk" target="_blank">VK</a>
+      <a  href="https://yandex.by/maps/org/kapous_professional/245136758949/?indoorLevel=1&ll=24.459418%2C53.163536&z=17" class="yandex" target="_blank">Адрес (Яндекс.Карты)</a>
+    </div>
 </div>
-<div class="modal-buttons">
-<button class="admin-btn" id="confirm-cancel">Отменить запись</button>
-<button class="cancel-btn" id="cancel-cancel">Отмена</button>
+
 </div>
+
+    <div class="card" id="scheduleBlock" style="margin-top:12px">
+        <strong>График работы</strong>
+      <p class="small" style="margin-top:8px">Пн: выходной<br>Вт–Пт: 10:00–18:00<br>Сб–Вс: 10:00–15:00</p>
+    </div>
+  </div>
 </div>
+
+<!-- admin panel -->
+<div id="adminPanel" class="admin-panel" aria-hidden="true">
+  <div class="pad">
+    <h3>Панель администратора</h3>
+    <div id="loginBox">
+      <input id="adminPassword" type="password" placeholder="Пароль" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.04);background:transparent;color:var(--text)" />
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button id="loginBtn" class="btn">Войти</button>
+        <button id="closePanel" class="btn" style="background:#333">Закрыть</button>
+      </div>
+      <p id="loginError" style="color:var(--danger);display:none;margin-top:8px">Неверный пароль</p>
+    </div>
+    <div id="adminContent" style="display:none;margin-top:12px">      <button id="addHolidayBtn" class="btn" style="background:#b33">Добавить выходной</button>      <div style="margin-top:10px"><strong>Выходные (админ)</strong><div id="holidaysList" class="list" style="margin-top:6px"></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="addBreakBtn" class="btn">Добавить перерыв</button>
+        <button id="clearAll" class="btn" style="background:#444">Удалить все</button>
+        <button id="logoutBtn" class="btn" style="background:#222">Выйти</button>
+      </div>
+      <h4 style="margin-top:12px">Перерывы</h4>
+      <div id="breaksList"></div>
+      <h4 style="margin-top:12px">Записи</h4>
+      <div id="bookingsList"></div>
+    </div>
+  </div>
 </div>
-<div class="modal" id="break-modal">
-<div class="modal-content">
-<h3><i class="fas fa-coffee"></i> Добавить перерыв</h3>
-<div class="form-group">
-<label for="break-date">Дата перерыва:</label>
-<input id="break-date" type="date"/>
-</div>
-<div class="form-group">
-<label for="break-start">Начало перерыва:</label>
-<input id="break-start" max="17:00" min="09:00" type="time" value="12:00"/>
-</div>
-<div class="form-group">
-<label for="break-end">Конец перерыва:</label>
-<input id="break-end" max="18:00" min="09:00" type="time" value="15:00"/>
-</div>
-<div class="modal-buttons">
-<button class="admin-btn" id="confirm-break">Добавить перерыв</button>
-<button class="cancel-btn" id="cancel-break">Отмена</button>
-</div>
-</div>
-</div>
-<div class="modal" id="edit-break-modal">
-<div class="modal-content">
-<h3><i class="fas fa-edit"></i> Редактировать перерыв</h3>
-<div class="form-group">
-<label for="edit-break-date">Дата перерыва:</label>
-<input id="edit-break-date" type="date"/>
-</div>
-<div class="form-group">
-<label for="edit-break-start">Начало перерыва:</label>
-<input id="edit-break-start" type="time"/>
-</div>
-<div class="form-group">
-<label for="edit-break-end">Конец перерыва:</label>
-<input id="edit-break-end" type="time"/>
-</div>
-<div class="modal-buttons">
-<button class="admin-btn" id="save-break">Сохранить изменения</button>
-<button class="cancel-btn" id="cancel-edit-break">Отмена</button>
-<button class="delete-btn" id="delete-break">Удалить перерыв</button>
-</div>
-</div>
-</div>
-<!-- Новое модальное окно для переноса записи -->
-<div class="modal" id="move-modal">
-<div class="modal-content move-modal-content">
-<h3><i class="fas fa-calendar-alt"></i> Перенос записи</h3>
-<div class="form-group">
-<label for="move-client-name">Клиент:</label>
-<input id="move-client-name" readonly="" type="text"/>
-</div>
-<div class="form-group">
-<label for="move-client-phone">Телефон:</label>
-<input id="move-client-phone" readonly="" type="text"/>
-</div>
-<div class="form-group">
-<label for="move-service">Услуга (длительность):</label>
-<input id="move-service" readonly="" type="text"/>
-</div>
-<div class="date-time-selector">
-<div class="date-selector">
-<label for="move-date">Новая дата:</label>
-<input id="move-date" type="date"/>
-</div>
-<div class="time-selector">
-<label for="move-time">Новое время:</label>
-<div class="available-slots" id="available-slots">
-<!-- Доступные слоты будут загружены здесь -->
-</div>
-</div>
-</div>
-<div class="form-group">
-<label for="move-notify-client">Оповестить клиента:</label>
-<input checked="" id="move-notify-client" type="checkbox"/>
-</div>
-<div class="modal-buttons">
-<button class="admin-btn" id="confirm-move">Перенести запись</button>
-<button class="cancel-btn" id="cancel-move">Отмена</button>
-</div>
-</div>
-</div>
-<footer>
-<div class="container">
-<div class="contact-info">
-<p><i class="fas fa-map-marker-alt"></i> <a href="https://yandex.by/maps/org/kapous_professional/245136758949/?indoorLevel=1&amp;ll=24.459418%2C53.163536&amp;z=17" target="_blank">Kapous Professional</a></p>
-<p><i class="fas fa-phone"></i> +375297888280</p>
-</div>
-<div class="social-links">
-<a href="https://www.instagram.com/tatianaliakhar/?hl=ru" target="_blank"><i class="fab fa-instagram"></i></a>
-<a href="https://vk.com/id39250640" target="_blank"><i class="fab fa-vk"></i></a>
-</div>
-<div class="copyright">
-                © 2023 Парикмахер Татьяна Ляхар. Все права защищены.
-            </div>
-</div>
-</footer>
+
+<!-- Modals -->
+
+<div id="holidayModal" class="modal"><div class="box">
+  <h4>Добавить выходной</h4>
+  <input id="holidayDate" type="date" />
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+    <button id="saveHoliday" class="btn">Сохранить</button>
+    <button id="cancelHoliday" class="btn" style="background:#444">Отмена</button>
+  </div>
+</div></div>
+
+<div id="breakModal" class="modal"><div class="box">
+  <h4>Перерыв</h4>
+  <input id="breakDate" type="date" />
+  <input id="breakStart" type="time" />
+  <input id="breakEnd" type="time" />
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+    <button id="saveBreak" class="btn">Сохранить</button>
+    <button id="cancelBreak" class="btn" style="background:#444">Отмена</button>
+  </div>
+</div></div>
+
+<div id="moveModal" class="modal"><div class="box">
+  <h4>Перенос записи</h4>
+  <input id="moveDate" type="date" />
+  <select id="moveTime"></select>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+    <button id="confirmMove" class="btn">Перенести</button>
+    <button id="cancelMove" class="btn" style="background:#444">Отмена</button>
+  </div>
+</div></div>
+
 <script>
-        // Данные приложения
-        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-        let dayOffs = JSON.parse(localStorage.getItem('dayOffs')||'[]');
-let breaks = JSON.parse(localStorage.getItem('breaks')) || [];
-        let currentDate = new Date();
-        let selectedDate = null;
-        let selectedTime = null;
-        let isAdmin = false;
-        let longPressTimer = null;
-        let selectedBookings = [];
-        let selectedBreaks = [];
-        
-        // Элементы DOM
-        const calendarEl = document.getElementById('calendar');
-        const currentMonthEl = document.getElementById('current-month');
-        const prevMonthBtn = document.getElementById('prev-month');
-        const nextMonthBtn = document.getElementById('next-month');
-        const timeSlotsEl = document.getElementById('time-slots');
-        const bookingFormEl = document.getElementById('booking-form');
-        const appointmentForm = document.getElementById('appointment-form');
-        const adminPanel = document.getElementById('admin-panel');
-        const adminAccess = document.getElementById('admin-access');
-        const adminPassword = document.getElementById('admin-password');
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const passwordError = document.getElementById('password-error');
-        const viewBookingsBtn = document.getElementById('view-bookings');
-        const viewBreaksBtn = document.getElementById('view-breaks');
-        const addBreakBtn = document.getElementById('add-break');
-        const deleteSelectedBtn = document.getElementById('delete-selected');
-        const bookingsList = document.getElementById('bookings-list');
-        const breaksList = document.getElementById('breaks-list');
-        const adminActionsPanel = document.getElementById('admin-actions-panel');
-        const longPressNotification = document.getElementById('long-press-notification');
-        const cancelModal = document.getElementById('cancel-modal');
-        const breakModal = document.getElementById('break-modal');
-        const editBreakModal = document.getElementById('edit-break-modal');
-        const moveModal = document.getElementById('move-modal');
-        
-        // Инициализация приложения
-        function init() {
-            renderCalendar();
-            setupEventListeners();
-            checkAdminStatus();
-        }
-        
-        // Рендер календаря
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            
-            currentMonthEl.textContent = new Date(year, month).toLocaleDateString('ru-RU', {
-                month: 'long',
-                year: 'numeric'
-            });
-            
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const daysInMonth = lastDay.getDate();
-            const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-            
-            calendarEl.innerHTML = '';
-            
-            // Заголовки дней недели
-            const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-            daysOfWeek.forEach(day => {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day-header';
-                dayEl.textContent = day;
-                calendarEl.appendChild(dayEl);
-            });
-            
-            // Пустые ячейки перед первым днем месяца
-            for (let i = 0; i < startDay; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.className = 'calendar-day other-month';
-                calendarEl.appendChild(emptyDay);
-            }
-            
-            // Дни месяца
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dayDate = new Date(year, month, i);
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day';
-                dayEl.textContent = i;
-                dayEl.dataset.date = dayDate.toISOString().split('T')[0];
-                
-                // Проверка на сегодняшний день
-                const today = new Date();
-                if (dayDate.toDateString() === today.toDateString()) {
-                    dayEl.classList.add('today');
-                }
-                
-                // Проверка на забронированные дни
-                const dayBookings = bookings.filter(booking => 
-                    booking.date === dayEl.dataset.date
-                );
-                
-                if (dayBookings.length > 0) {
-                    dayEl.classList.add('booked');
-                    
-                    // Проверяем, есть ли длительные услуги
-                    const hasLongServices = dayBookings.some(booking => booking.duration > 1);
-                    if (hasLongServices) {
-                        dayEl.classList.add('booking-group-day');
-                    }
-                    
-                    // Добавляем имена клиентов
-                    const clientNames = dayBookings.map(b => b.name).join(', ');
-                    const nameEl = document.createElement('div');
-                    nameEl.className = 'client-name';
-                    nameEl.textContent = clientNames;
-                    dayEl.appendChild(nameEl);
-                }
-                
-                // Проверка на перерывы
-                const dayBreaks = breaks.filter(br => 
-                    br.date === dayEl.dataset.date
-                );
-                
-                if (dayBreaks.length > 0) {
-                    dayEl.classList.add('break-day');
-                }
-                
-                // Выбранный день
-                if (selectedDate && dayEl.dataset.date === selectedDate) {
-                    dayEl.classList.add('selected');
-                }
-                
-                dayEl.addEventListener('click', () => selectDate(dayEl.dataset.date));
-                
-                calendarEl.appendChild(dayEl);
-            }
-        }
-        
-        // Выбор даты
-        function selectDate(date) {
-            selectedDate = date;
-            renderCalendar();
-            renderTimeSlots();
-            bookingFormEl.style.display = 'none';
-        }
-        
-        // Рендер временных слотов с учетом длительности услуг
-        function renderTimeSlots() {
-            if (!selectedDate) return;
-            
-            timeSlotsEl.innerHTML = '';
-            
-            // Создаем слоты с 9:00 до 18:00 с интервалом в 1 час
-            for (let hour = 9; hour <= 18; hour++) {
-                const timeSlot = document.createElement('div');
-                timeSlot.className = 'time-slot';
-                timeSlot.textContent = `${hour}:00`;
-                timeSlot.dataset.time = `${hour}:00`;
-                
-                // Проверка на забронированные слоты
-                
-const slotBookings = bookings.filter(booking => 
-                    booking.date === selectedDate && booking.time === `${hour}:00`
-                );
-                // цвет клиента
-                function getClientColor(name){
-                    let hash = 0;
-                    for (let i=0; i<name.length; i++){
-                        hash = name.charCodeAt(i) + ((hash<<5)-hash);
-                    }
-                    const hue = hash % 360;
-                    return `hsl(${hue},70%,80%)`;
-                }
+/* Data */
+let current = new Date();
+let selectedDate = null;
+let selectedTime = null;
+let bookings = JSON.parse(localStorage.getItem('bookings')||'[]');
+let breaks = JSON.parse(localStorage.getItem('breaks')||'[]');
 
-                
-                if (slotBookings.length > 0) {
-                    // Красим фон для разных клиентов
-                    timeSlot.style.backgroundColor = getClientColor(slotBookings[0].name);
-                    timeSlot.classList.add('booked');
-                    timeSlot.title = `Занято: ${slotBookings[0].name}`;
-                    
-                    const nameEl = document.createElement('div');
-                    nameEl.className = 'client-name';
-                    nameEl.textContent = slotBookings[0].name;
-                    timeSlot.appendChild(nameEl);
-                    
-                    // Проверяем, является ли это началом групповой записи
-                    const booking = slotBookings[0];
-                    if (booking.duration > 1) {
-                        timeSlot.classList.add('booking-group', 'booking-group-start');
-                        
-                        // Добавляем индикатор длительности
-                        const durationEl = document.createElement('div');
-                        durationEl.className = 'client-name';
-                        durationEl.textContent = `${booking.duration} ч.`;
-                        durationEl.style.fontWeight = 'bold';
-                        timeSlot.appendChild(durationEl);
-                    }
-                }
-                
-                // Проверка на перерывы
-                const slotBreaks = breaks.filter(br => 
-                    br.date === selectedDate && 
-                    isTimeInBreak(`${hour}:00`, br.start, br.end)
-                );
-                
-                if (slotBreaks.length > 0) {
-                    timeSlot.classList.add('break');
-                    timeSlot.title = `Перерыв: ${slotBreaks[0].start} - ${slotBreaks[0].end}`;
-                }
-                
-                // Проверка на блокировку из-за длительных услуг
-                if (isTimeBlocked(`${hour}:00`)) {
-                    timeSlot.classList.add('blocked');
-                    timeSlot.title = 'Время недоступно из-за длительной услуги';
-                }
-                
-                // Выбранный слот
-                if (selectedTime && timeSlot.dataset.time === selectedTime) {
-                    timeSlot.classList.add('selected');
-                }
-                
-                // Для администратора добавляем возможность долгого нажатия
-                if (isAdmin) {
-                    setupLongPress(timeSlot);
-                } else {
-                    timeSlot.addEventListener('click', () => selectTime(timeSlot.dataset.time));
-                }
-                
-                timeSlotsEl.appendChild(timeSlot);
-            }
-            
-            // Обновляем классы для групповых записей (середина и конец)
-            updateBookingGroupClasses();
-        }
-        
-        // Проверка, находится ли время в перерыве
-        function isTimeInBreak(time, breakStart, breakEnd) {
-            const timeMinutes = convertTimeToMinutes(time);
-            const breakStartMinutes = convertTimeToMinutes(breakStart);
-            const breakEndMinutes = convertTimeToMinutes(breakEnd);
-            
-            return timeMinutes >= breakStartMinutes && timeMinutes < breakEndMinutes;
-        }
-        
-        // Конвертация времени в минуты
-        function convertTimeToMinutes(time) {
-            const [hours, minutes] = time.split(':').map(Number);
-            return hours * 60 + minutes;
-        }
+/* Elements */
+const calendarEl = document.getElementById('calendar');
+const monthEl = document.getElementById('month');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const slotsEl = document.getElementById('slots');
+const form = document.getElementById('form');
+const serviceEl = document.getElementById('service');
 
-        // Конвертация минут в время (формат HH:00)
-        function convertMinutesToTime(minutes) {
-            const hours = Math.floor(minutes / 60);
-            const mins = minutes % 60;
-            return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-        }
-        
-        // Проверка, заблокировано ли время из-за длительных услуг
-        function isTimeBlocked(time) {
-            const timeMinutes = convertTimeToMinutes(time);
-            
-            // Проверяем все записи на выбранную дату
-            const dayBookings = bookings.filter(booking => booking.date === selectedDate);
-            
-            for (const booking of dayBookings) {
-                const bookingStart = convertTimeToMinutes(booking.time);
-                const bookingEnd = bookingStart + (booking.duration * 60);
-                
-                // Если время попадает в промежуток длительной услуги
-                if (timeMinutes >= bookingStart && timeMinutes < bookingEnd) {
-                    return true;
-                }
-            }
-            
-            return false;
-        }
-        
-        // Обновление классов для групповых записей
-        function updateBookingGroupClasses() {
-            const dayBookings = bookings.filter(booking => booking.date === selectedDate);
-            
-            for (const booking of dayBookings) {
-                if (booking.duration > 1) {
-                    const startTime = booking.time;
-                    const startHour = parseInt(startTime.split(':')[0]);
-                    
-                    for (let i = 1; i < booking.duration; i++) {
-                        const subsequentHour = startHour + i;
-                        if (subsequentHour <= 18) {
-                            const subsequentTime = `${subsequentHour}:00`;
-                            const subsequentSlot = document.querySelector(`.time-slot[data-time="${subsequentTime}"]`);
-                            
-                            if (subsequentSlot) {
-                                subsequentSlot.classList.add('booking-group');
-                                
-                                if (i === booking.duration - 1) {
-                                    subsequentSlot.classList.add('booking-group-end');
-                                } else {
-                                    subsequentSlot.classList.add('booking-group-middle');
-                                }
-                                
-                                // Добавляем имя клиента и индикатор длительности
-                                const nameEl = document.createElement('div');
-                                nameEl.className = 'client-name';
-                                nameEl.textContent = booking.name;
-                                subsequentSlot.appendChild(nameEl);
-                                
-                                const durationEl = document.createElement('div');
-                                durationEl.className = 'client-name';
-                                durationEl.textContent = `${booking.duration} ч.`;
-                                durationEl.style.fontWeight = 'bold';
-                                subsequentSlot.appendChild(durationEl);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Выбор времени
-        function selectTime(time) {
-            if (!selectedDate) return;
-            
-            const timeSlot = document.querySelector(`.time-slot[data-time="${time}"]`);
-            
-            // Проверяем, доступен ли слот
-            if (timeSlot.classList.contains('booked') || timeSlot.classList.contains('break') || timeSlot.classList.contains('blocked')) {
-                return;
-            }
-            
-            selectedTime = time;
-            renderTimeSlots();
-            bookingFormEl.style.display = 'block';
-        }
-        
-        // Настройка долгого нажатия для администратора
-        function setupLongPress(element) {
-            element.addEventListener('mousedown', startLongPress);
-            element.addEventListener('touchstart', startLongPress);
-            element.addEventListener('mouseup', cancelLongPress);
-            element.addEventListener('mouseleave', cancelLongPress);
-            element.addEventListener('touchend', cancelLongPress);
-            element.addEventListener('touchcancel', cancelLongPress);
-            
-            function startLongPress(e) {
-                e.preventDefault();
-                longPressTimer = setTimeout(() => {
-                    showAdminActions(e);
-                }, 1000);
-                
-                // Показываем уведомление о долгом нажатии
-                longPressNotification.style.display = 'block';
-                setTimeout(() => {
-                    longPressNotification.style.display = 'none';
-                }, 1000);
-            }
-            
-            function cancelLongPress() {
-                if (longPressTimer) {
-                    clearTimeout(longPressTimer);
-                    longPressTimer = null;
-                }
-                longPressNotification.style.display = 'none';
-            }
-        }
-        
-        // Показать панель действий администратора
-        function showAdminActions(e) {
-            const rect = e.target.getBoundingClientRect();
-            adminActionsPanel.style.top = `${rect.top + window.scrollY}px`;
-            adminActionsPanel.style.left = `${rect.left + window.scrollX}px`;
-            adminActionsPanel.style.display = 'flex';
-            
-            // Добавляем обработчики для кнопок
-            document.getElementById('admin-edit').onclick = () => {
-                adminEditBooking(e.target.dataset.time);
-                adminActionsPanel.style.display = 'none';
-            };
-            
-            document.getElementById('admin-break').onclick = () => {
-                adminAddBreak(e.target.dataset.time);
-                adminActionsPanel.style.display = 'none';
-            };
-            
-            document.getElementById('admin-delete').onclick = () => {
-                adminDeleteBookings(e.target.dataset.time);
-                adminActionsPanel.style.display = 'none';
-            };
-            
-            document.getElementById('admin-notify').onclick = () => {
-                adminNotifyClient(e.target.dataset.time);
-                adminActionsPanel.style.display = 'none';
-            };
-            
-            // Закрытие панели при клике вне ее
-            setTimeout(() => {
-                document.addEventListener('click', closeAdminActions);
-            }, 10);
-        }
-        
-        // Закрыть панель действий администратора
-        function closeAdminActions(e) {
-            if (!adminActionsPanel.contains(e.target)) {
-                adminActionsPanel.style.display = 'none';
-                document.removeEventListener('click', closeAdminActions);
-            }
-        }
-        
-        // Редактирование записи администратором
-        function adminEditBooking(time) {
-            if (!selectedDate) return;
-            
-            selectedTime = time;
-            renderTimeSlots();
-            bookingFormEl.style.display = 'block';
-            
-            // Проверяем, есть ли уже запись на это время
-            const existingBooking = bookings.find(booking => 
-                booking.date === selectedDate && booking.time === selectedTime
-            );
-            
-            if (existingBooking) {
-                document.getElementById('name').value = existingBooking.name;
-                document.getElementById('phone').value = existingBooking.phone;
-                document.getElementById('service').value = existingBooking.service;
-            } else {
-                document.getElementById('name').value = '';
-                document.getElementById('phone').value = '';
-                document.getElementById('service').value = '';
-            }
-        }
-        
-        // Добавление перерыва администратором
-        function adminAddBreak(time) {
-            if (!selectedDate) return;
-            
-            // Устанавливаем время перерыва на основе выбранного времени
-            const breakStart = time;
-            const breakEnd = `${parseInt(time.split(':')[0]) + 1}:00`;
-            
-            document.getElementById('break-date').value = selectedDate;
-            document.getElementById('break-start').value = breakStart;
-            document.getElementById('break-end').value = breakEnd;
-            
-            breakModal.style.display = 'flex';
-        }
-        
-        // Удаление записей администратором
-        function adminDeleteBookings(time) {
-            if (!selectedDate) return;
-            
-            // Находим все записи на выбранную дату и время
-            const bookingsToDelete = bookings.filter(booking => 
-                booking.date === selectedDate && booking.time === time
-            );
-            
-            if (bookingsToDelete.length === 0) {
-                alert('На это время нет записей');
-                return;
-            }
-            
-            if (confirm(`Удалить ${bookingsToDelete.length} записей на ${selectedDate} в ${time}?`)) {
-                // Удаляем записи
-                bookings = bookings.filter(booking => 
-                    !(booking.date === selectedDate && booking.time === time)
-                );
-                
-                saveBookings();
-                renderCalendar();
-                renderTimeSlots();
-                alert('Записи удалены');
-            }
-        }
-        
-        // Оповещение клиента
-        function adminNotifyClient(time) {
-            if (!selectedDate) return;
-            
-            const booking = bookings.find(b => b.date === selectedDate && b.time === time);
-            
-            if (!booking) {
-                alert('На это время нет записей');
-                return;
-            }
-            
-            const message = `Напоминание о записи: ${selectedDate} в ${time}. Услуга: ${booking.service}`;
-            const whatsappUrl = `https://wa.me/${booking.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-            const viberUrl = `viber://chat?number=${booking.phone.replace(/\D/g, '')}`;
-            
-            // Пытаемся открыть Viber, если не получится - открываем WhatsApp
-            window.open(viberUrl, '_blank');
-            setTimeout(() => {
-                if (!document.hasFocus()) {
-                    window.open(whatsappUrl, '_blank');
-                }
-            }, 500);
-        }
-        
-        // Настройка обработчиков событий
-        function setupEventListeners() {
-            prevMonthBtn.addEventListener('click', () => {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                renderCalendar();
-            });
-            
-            nextMonthBtn.addEventListener('click', () => {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                renderCalendar();
-            });
-            
-            appointmentForm.addEventListener('submit', handleBooking);
-            
-            loginBtn.addEventListener('click', handleAdminLogin);
-            logoutBtn.addEventListener('click', handleAdminLogout);
-            
-            viewBookingsBtn.addEventListener('click', () => {
-                bookingsList.style.display = bookingsList.style.display === 'block' ? 'none' : 'block';
-                breaksList.style.display = 'none';
-                renderBookingsList();
-            });
-            
-            viewBreaksBtn.addEventListener('click', () => {
-                breaksList.style.display = breaksList.style.display === 'block' ? 'none' : 'block';
-                bookingsList.style.display = 'none';
-                renderBreaksList();
-            });
-            
-            addBreakBtn.addEventListener('click', () => {
-                document.getElementById('break-date').value = selectedDate || new Date().toISOString().split('T')[0];
-                breakModal.style.display = 'flex';
-            });
-            
-            deleteSelectedBtn.addEventListener('click', deleteSelectedItems);
-            
-            // Модальные окна
-            document.getElementById('cancel-cancel').addEventListener('click', () => {
-                cancelModal.style.display = 'none';
-            });
-            
-            document.getElementById('confirm-break').addEventListener('click', addBreak);
-            document.getElementById('cancel-break').addEventListener('click', () => {
-                breakModal.style.display = 'none';
-            });
-            
-            document.getElementById('save-break').addEventListener('click', saveEditedBreak);
-            document.getElementById('cancel-edit-break').addEventListener('click', () => {
-                editBreakModal.style.display = 'none';
-            });
-            document.getElementById('delete-break').addEventListener('click', deleteBreak);
+/* Work schedule (getDay:0=Sun,1=Mon...) */
+const workSchedule = {
+  0: {start:10,end:15},
+  1: null,
+  2: {start:10,end:18},
+  3: {start:10,end:18},
+  4: {start:10,end:18},
+  5: {start:10,end:18},
+  6: {start:10,end:15}
+};
 
-            // Обработчики для модального окна переноса
-            document.getElementById('move-date').addEventListener('change', function() {
-                const bookingId = moveModal.dataset.bookingId;
-                const booking = bookings.find(b => b.id == bookingId);
-                
-                if (booking) {
-                    loadAvailableSlots(this.value, booking.duration);
-                }
-            });
-            
-            document.getElementById('confirm-move').addEventListener('click', confirmMoveBooking);
-            document.getElementById('cancel-move').addEventListener('click', function() {
-                moveModal.style.display = 'none';
-            });
-            
-            // Закрытие модальных окон при клике вне их
-            window.addEventListener('click', (e) => {
-                if (e.target === cancelModal) {
-                    cancelModal.style.display = 'none';
-                }
-                if (e.target === breakModal) {
-                    breakModal.style.display = 'none';
-                }
-                if (e.target === editBreakModal) {
-                    editBreakModal.style.display = 'none';
-                }
-                if (e.target === moveModal) {
-                    moveModal.style.display = 'none';
-                }
-            });
-        }
-        
-        // Обработка записи с проверкой доступности времени
-        function handleBooking(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const service = document.getElementById('service').value;
-            const duration = parseInt(document.querySelector(`#service option[value="${service}"]`).dataset.duration);
-            
-            if (!name || !phone || !service || !selectedDate || !selectedTime) {
-                alert('Пожалуйста, заполните все поля и выберите дату и время');
-                return;
-            }
-            
-            // Проверяем, достаточно ли свободного времени для услуги
-            if (!isTimeAvailableForDuration(selectedTime, duration)) {
-                alert(`Недостаточно свободного времени для услуги "${service}" (${duration} часа). Пожалуйста, выберите другое время.`);
-                return;
-            }
-            
-            // Проверяем, не занято ли время
-            const existingBooking = bookings.find(booking => 
-                booking.date === selectedDate && booking.time === selectedTime
-            );
-            
-            if (existingBooking && !isAdmin) {
-                alert('Это время уже занято. Пожалуйста, выберите другое время.');
-                return;
-            }
-            
-            // Если администратор редактирует существующую запись, удаляем старую
-            if (existingBooking && isAdmin) {
-                bookings = bookings.filter(booking => 
-                    !(booking.date === selectedDate && booking.time === selectedTime)
-                );
-            }
-            
-            // Создаем новую запись
-            const booking = {
-                id: Date.now(),
-                date: selectedDate,
-                time: selectedTime,
-                name,
-                phone,
-                service,
-                duration,
-                timestamp: new Date().toISOString()
-            };
-            
-            bookings.push(booking);
-            saveBookings();
-            
-            // Отправляем уведомление мастеру
-            sendNotificationToMaster(booking);
-            
-            alert('Запись успешно оформлена!');
-            
-            // Сбрасываем форму
-            appointmentForm.reset();
-            bookingFormEl.style.display = 'none';
-            selectedTime = null;
-            renderCalendar();
-            renderTimeSlots();
-        }
+function localIso(d){ const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
 
-        // Проверка доступности времени для услуги заданной длительности
-        function isTimeAvailableForDuration(startTime, duration) {
-            const startMinutes = convertTimeToMinutes(startTime);
-            const endMinutes = startMinutes + (duration * 60);
-            
-            // Проверяем, не выходит ли за рабочий день
-            if (endMinutes > convertTimeToMinutes('18:00')) {
-                return false;
-            }
-            
-            // Проверяем каждые 30 минут в промежутке
-            for (let minutes = startMinutes; minutes < endMinutes; minutes += 30) {
-                const time = convertMinutesToTime(minutes);
-                
-                // Проверяем, не занято ли это время
-                const isBooked = bookings.some(booking => 
-                    booking.date === selectedDate && 
-                    booking.time === time
-                );
-                
-                // Проверяем, не попадает ли в перерыв
-                const isInBreak = breaks.some(br => 
-                    br.date === selectedDate && 
-                    isTimeInBreak(time, br.start, br.end)
-                );
-                
-                if (isBooked || isInBreak) {
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-        
-        // Отправка уведомления мастеру
-        function sendNotificationToMaster(booking) {
-            const message = `Новая запись!\n\nКлиент: ${booking.name}\nТелефон: ${booking.phone}\nДата: ${booking.date}\nВремя: ${booking.time}\nУслуга: ${booking.service} (${booking.duration} ч.)\n\nСсылка на календарь: ${window.location.href}`;
-            
-            // Номер мастера
-            const masterPhone = '+375297888280';
-            
-            // Отправка в WhatsApp
-            const whatsappUrl = `https://wa.me/${masterPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-            
-            // Отправка в Viber
-            const viberUrl = `viber://chat?number=${masterPhone.replace(/\D/g, '')}&text=${encodeURIComponent(message)}`;
-            
-            // Пытаемся открыть Viber, если не получится - открываем WhatsApp
-            const viberWindow = window.open(viberUrl, '_blank');
-            setTimeout(() => {
-                if (!viberWindow || viberWindow.closed || typeof viberWindow.closed == 'undefined') {
-                    window.open(whatsappUrl, '_blank');
-                }
-            }, 500);
-        }
-        
-        // Сохранение записей в localStorage
-        function saveBookings() {
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-        }
-        
-        // Сохранение перерывов в localStorage
-        function saveBreaks() {
-            localStorage.setItem('breaks', JSON.stringify(breaks));
-        }
-        
-        // Вход администратора
-        function handleAdminLogin() {
-            const password = adminPassword.value;
-            
-            // Простой пароль для демонстрации
-            if (password === 'andron18') {
-                isAdmin = true;
-                adminPanel.style.display = 'block';
-                adminAccess.style.display = 'none';
-                passwordError.style.display = 'none';
-                renderCalendar();
-                renderTimeSlots();
-            } else {
-                passwordError.style.display = 'block';
-            }
-        }
-        
-        // Выход администратора
-        function handleAdminLogout() {
-            isAdmin = false;
-            adminPanel.style.display = 'none';
-            adminAccess.style.display = 'block';
-            adminPassword.value = '';
-            bookingsList.style.display = 'none';
-            breaksList.style.display = 'none';
-            renderCalendar();
-            renderTimeSlots();
-        }
-        
-        // Проверка статуса администратора
-        function checkAdminStatus() {
-            // Для демонстрации всегда показываем панель доступа
-            adminPanel.style.display = 'none';
-            adminAccess.style.display = 'block';
-        }
-        
-        // Рендер списка записей с кнопкой переноса
-        function renderBookingsList() {
-            if (bookings.length === 0) {
-                bookingsList.innerHTML = '<p>Нет записей</p>';
-                return;
-            }
-            
-            // Сортируем записи по дате и времени
-            const sortedBookings = [...bookings].sort((a, b) => {
-                const dateA = new Date(a.date + 'T' + a.time);
-                const dateB = new Date(b.date + 'T' + b.time);
-                return dateA - dateB;
-            });
-            
-            bookingsList.innerHTML = `
-                <div class="bookings-header">
-                    <h4><i class="fas fa-list"></i> Список записей (${bookings.length})</h4>
-                    <div class="select-all">
-                        <input type="checkbox" id="select-all-bookings">
-                        <label for="select-all-bookings">Выбрать все</label>
-                    </div>
-                </div>
-            `;
-            
-            sortedBookings.forEach(booking => {
-                const bookingEl = document.createElement('div');
-                bookingEl.className = 'booking-item';
-                bookingEl.innerHTML = `
-                    <div class="booking-info">
-                        <div><strong>${booking.name}</strong> - ${booking.phone}</div>
-                        <div>${booking.date} в ${booking.time} (${booking.duration} ч.)</div>
-                        <div>Услуга: ${booking.service}</div>
-                    </div>
-                    <div class="booking-actions">
-                        <button class="edit-btn" data-id="${booking.id}"><i class="fas fa-edit"></i> Редактировать</button>
-                        <button class="move-btn" data-id="${booking.id}"><i class="fas fa-calendar-alt"></i> Перенести</button>
-                        <button class="delete-btn" data-id="${booking.id}"><i class="fas fa-trash"></i> Удалить</button>
-                    </div>
-                `;
-                
-                bookingsList.appendChild(bookingEl);
-            });
-            
-            // Обработчики для кнопок
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => editBooking(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.move-btn').forEach(btn => {
-                btn.addEventListener('click', () => moveBooking(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => deleteBooking(btn.dataset.id));
-            });
-            
-            // Обработчик для "Выбрать все"
-            document.getElementById('select-all-bookings').addEventListener('change', (e) => {
-                const checkboxes = document.querySelectorAll('.booking-checkbox');
-                checkboxes.forEach(cb => {
-                    cb.checked = e.target.checked;
-                });
-                
-                if (e.target.checked) {
-                    selectedBookings = sortedBookings.map(b => b.id);
-                } else {
-                    selectedBookings = [];
-                }
-            });
-        }
-        
-        // Функция переноса записи
-        function moveBooking(id) {
-            const booking = bookings.find(b => b.id == id);
-            if (!booking) return;
-            
-            // Заполняем модальное окно данными о записи
-            document.getElementById('move-client-name').value = booking.name;
-            document.getElementById('move-client-phone').value = booking.phone;
-            document.getElementById('move-service').value = `${booking.service} (${booking.duration} ч.)`;
-            document.getElementById('move-date').value = booking.date;
-            
-            // Сохраняем ID записи для переноса
-            moveModal.dataset.bookingId = id;
-            
-            // Загружаем доступные слоты для текущей даты
-            loadAvailableSlots(booking.date, booking.duration);
-            
-            // Показываем модальное окно
-            moveModal.style.display = 'flex';
-        }
+function renderCalendar(){ const y=current.getFullYear(), m=current.getMonth(); monthEl.textContent = current.toLocaleDateString('ru-RU',{month:'long', year:'numeric'}); calendarEl.innerHTML=''; const days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс']; days.forEach(d=>{const el=document.createElement('div');el.className='dow';el.textContent=d;calendarEl.appendChild(el);}); const first=new Date(y,m,1), last=new Date(y,m+1,0); const start = (first.getDay()||7)-1; for(let i=0;i<start;i++){const e=document.createElement('div');e.className='day other';calendarEl.appendChild(e);} for(let d=1; d<= last.getDate(); d++){ const date=new Date(y,m,d); const iso=localIso(date); const el=document.createElement('div'); el.className='day'; el.textContent=d; el.dataset.date=iso; if(date.toDateString()=== (new Date()).toDateString()) el.classList.add('today'); const dayBookings = bookings.filter(b=>b.date===iso); if(dayBookings.length) el.classList.add('booked'); const dayBreaks = breaks.filter(br=>br.date===iso); if(dayBreaks.length) el.classList.add('break-day'); if(selectedDate===iso) el.classList.add('selected'); el.addEventListener('click', ()=>{ selectedDate=iso; selectedTime=null; renderCalendar(); renderSlots(); }); calendarEl.appendChild(el);} }
 
-        // Загрузка доступных слотов для переноса
-        function loadAvailableSlots(date, duration) {
-            const slotsContainer = document.getElementById('available-slots');
-            slotsContainer.innerHTML = '';
-            
-            // Генерируем слоты с 9:00 до 18:00
-            for (let hour = 9; hour <= 18; hour++) {
-                const time = `${hour}:00`;
-                
-                // Проверяем доступность слота
-                const isAvailable = isTimeAvailableForDurationOnDate(time, duration, date);
-                
-                const slotOption = document.createElement('div');
-                slotOption.className = `slot-option ${isAvailable ? '' : 'unavailable'}`;
-                slotOption.textContent = time;
-                slotOption.dataset.time = time;
-                
-                if (isAvailable) {
-                    slotOption.addEventListener('click', function() {
-                        // Снимаем выделение со всех слотов
-                        document.querySelectorAll('.slot-option').forEach(slot => {
-                            slot.classList.remove('selected');
-                        });
-                        
-                        // Выделяем текущий слот
-                        this.classList.add('selected');
-                        
-                        // Устанавливаем выбранное время
-                        moveModal.dataset.selectedTime = time;
-                    });
-                }
-                
-                slotsContainer.appendChild(slotOption);
-            }
-        }
+function toMinutes(t){ const [hh,mm]=t.split(':').map(Number); return hh*60 + (mm||0); }
+function nowIsAfter(dateIso, timeStr){ const dt=new Date(dateIso+'T'+timeStr+':00'); return new Date() > dt; }
 
-        // Проверка доступности времени на определенную дату
-        function isTimeAvailableForDurationOnDate(startTime, duration, date) {
-            const startMinutes = convertTimeToMinutes(startTime);
-            const endMinutes = startMinutes + (duration * 60);
-            
-            // Проверяем, не выходит ли за рабочий день
-            if (endMinutes > convertTimeToMinutes('18:00')) {
-                return false;
-            }
-            
-            // Проверяем каждые 30 минут в промежутке
-            for (let minutes = startMinutes; minutes < endMinutes; minutes += 30) {
-                const time = convertMinutesToTime(minutes);
-                
-                // Проверяем, не занято ли это время
-                const isBooked = bookings.some(booking => 
-                    booking.date === date && 
-                    booking.time === time &&
-                    booking.id != moveModal.dataset.bookingId // Исключаем текущую запись из проверки
-                );
-                
-                // Проверяем, не попадает ли в перерыв
-                const isInBreak = breaks.some(br => 
-                    br.date === date && 
-                    isTimeInBreak(time, br.start, br.end)
-                );
-                
-                if (isBooked || isInBreak) {
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-        
-        // Подтверждение переноса записи
-        function confirmMoveBooking() {
-            const bookingId = moveModal.dataset.bookingId;
-            const newDate = document.getElementById('move-date').value;
-            const newTime = moveModal.dataset.selectedTime;
-            const notifyClient = document.getElementById('move-notify-client').checked;
-            
-            if (!newDate || !newTime) {
-                alert('Пожалуйста, выберите новую дату и время');
-                return;
-            }
-            
-            const bookingIndex = bookings.findIndex(b => b.id == bookingId);
-            if (bookingIndex === -1) return;
-            
-            const oldDate = bookings[bookingIndex].date;
-            const oldTime = bookings[bookingIndex].time;
-            
-            // Обновляем запись
-            bookings[bookingIndex].date = newDate;
-            bookings[bookingIndex].time = newTime;
-            
-            saveBookings();
-            
-            // Оповещаем клиента, если нужно
-            if (notifyClient) {
-                notifyClientAboutReschedule(bookings[bookingIndex], oldDate, oldTime);
-            }
-            
-            alert('Запись успешно перенесена!');
-            moveModal.style.display = 'none';
-            
-            // Обновляем интерфейс
-            renderBookingsList();
-            renderCalendar();
-            renderTimeSlots();
-        }
-
-        // Оповещение клиента о переносе записи
-        function notifyClientAboutReschedule(booking, oldDate, oldTime) {
-            const message = `Уважаемый(ая) ${booking.name}! Ваша запись на услугу "${booking.service}" перенесена с ${oldDate} в ${oldTime} на ${booking.date} в ${booking.time}. Приносим извинения за возможные неудобства.`;
-            
-            // Отправка в WhatsApp
-            const whatsappUrl = `https://wa.me/${booking.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-            
-            // Отправка в Viber
-            const viberUrl = `viber://chat?number=${booking.phone.replace(/\D/g, '')}&text=${encodeURIComponent(message)}`;
-            
-            // Пытаемся открыть Viber, если не получится - открываем WhatsApp
-            const viberWindow = window.open(viberUrl, '_blank');
-            setTimeout(() => {
-                if (!viberWindow || viberWindow.closed || typeof viberWindow.closed == 'undefined') {
-                    window.open(whatsappUrl, '_blank');
-                }
-            }, 500);
-        }
-        
-        // Рендер списка перерывов
-        function renderBreaksList() {
-            if (breaks.length === 0) {
-                breaksList.innerHTML = '<p>Нет перерывов</p>';
-                return;
-            }
-            
-            // Сортируем перерывы по дате и времени
-            const sortedBreaks = [...breaks].sort((a, b) => {
-                const dateA = new Date(a.date + 'T' + a.start);
-                const dateB = new Date(b.date + 'T' + b.start);
-                return dateA - dateB;
-            });
-            
-            breaksList.innerHTML = `
-                <div class="bookings-header">
-                    <h4><i class="fas fa-coffee"></i> Список перерывов (${breaks.length})</h4>
-                    <div class="select-all">
-                        <input type="checkbox" id="select-all-breaks">
-                        <label for="select-all-breaks">Выбрать все</label>
-                    </div>
-                </div>
-            `;
-            
-            sortedBreaks.forEach(br => {
-                const breakEl = document.createElement('div');
-                breakEl.className = 'break-item';
-                breakEl.innerHTML = `
-                    <div class="break-info">
-                        <div><strong>${br.date}</strong> с ${br.start} до ${br.end}</div>
-                    </div>
-                    <div class="break-actions">
-                        <button class="edit-btn" data-id="${br.id}"><i class="fas fa-edit"></i> Редактировать</button>
-                        <button class="delete-btn" data-id="${br.id}"><i class="fas fa-trash"></i> Удалить</button>
-                    </div>
-                `;
-                
-                breaksList.appendChild(breakEl);
-            });
-            
-            // Обработчики для кнопок
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => editBreak(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => deleteBreakFromList(btn.dataset.id));
-            });
-            
-            // Обработчик для "Выбрать все"
-            document.getElementById('select-all-breaks').addEventListener('change', (e) => {
-                const checkboxes = document.querySelectorAll('.break-checkbox');
-                checkboxes.forEach(cb => {
-                    cb.checked = e.target.checked;
-                });
-                
-                if (e.target.checked) {
-                    selectedBreaks = sortedBreaks.map(b => b.id);
-                } else {
-                    selectedBreaks = [];
-                }
-            });
-        }
-        
-        // Редактирование записи
-        function editBooking(id) {
-            const booking = bookings.find(b => b.id == id);
-            if (!booking) return;
-            
-            // Устанавливаем выбранную дату и время
-            selectedDate = booking.date;
-            selectedTime = booking.time;
-            
-            renderCalendar();
-            renderTimeSlots();
-            
-            // Заполняем форму
-            document.getElementById('name').value = booking.name;
-            document.getElementById('phone').value = booking.phone;
-            document.getElementById('service').value = booking.service;
-            
-            // Показываем форму
-            bookingFormEl.style.display = 'block';
-            bookingFormEl.scrollIntoView({ behavior: 'smooth' });
-            
-            // Удаляем старую запись
-            bookings = bookings.filter(b => b.id != id);
-            saveBookings();
-        }
-        
-        // Удаление записи
-        function deleteBooking(id) {
-            if (confirm('Вы уверены, что хотите удалить эту запись?')) {
-                bookings = bookings.filter(b => b.id != id);
-                saveBookings();
-                renderBookingsList();
-                renderCalendar();
-                renderTimeSlots();
-            }
-        }
-        
-        // Добавление перерыва
-        function addBreak() {
-            const date = document.getElementById('break-date').value;
-            const start = document.getElementById('break-start').value;
-            const end = document.getElementById('break-end').value;
-            
-            if (!date || !start || !end) {
-                alert('Пожалуйста, заполните все поля');
-                return;
-            }
-            
-            if (convertTimeToMinutes(start) >= convertTimeToMinutes(end)) {
-                alert('Время окончания перерыва должно быть позже времени начала');
-                return;
-            }
-            
-            const newBreak = {
-                id: Date.now(),
-                date,
-                start,
-                end
-            };
-            
-            breaks.push(newBreak);
-            saveBreaks();
-            
-            breakModal.style.display = 'none';
-            alert('Перерыв добавлен');
-            
-            renderCalendar();
-            renderTimeSlots();
-            renderBreaksList();
-        }
-        
-        // Редактирование перерыва
-        function editBreak(id) {
-            const br = breaks.find(b => b.id == id);
-            if (!br) return;
-            
-            document.getElementById('edit-break-date').value = br.date;
-            document.getElementById('edit-break-start').value = br.start;
-            document.getElementById('edit-break-end').value = br.end;
-            document.getElementById('edit-break-modal').dataset.editingId = id;
-            
-            editBreakModal.style.display = 'flex';
-        }
-        
-        // Сохранение изменений перерыва
-        function saveEditedBreak() {
-            const id = document.getElementById('edit-break-modal').dataset.editingId;
-            const date = document.getElementById('edit-break-date').value;
-            const start = document.getElementById('edit-break-start').value;
-            const end = document.getElementById('edit-break-end').value;
-            
-            if (!date || !start || !end) {
-                alert('Пожалуйста, заполните все поля');
-                return;
-            }
-            
-            if (convertTimeToMinutes(start) >= convertTimeToMinutes(end)) {
-                alert('Время окончания перерыва должно быть позже времени начала');
-                return;
-            }
-            
-            const breakIndex = breaks.findIndex(b => b.id == id);
-            if (breakIndex !== -1) {
-                breaks[breakIndex].date = date;
-                breaks[breakIndex].start = start;
-                breaks[breakIndex].end = end;
-                
-                saveBreaks();
-                editBreakModal.style.display = 'none';
-                alert('Перерыв обновлен');
-                
-                renderCalendar();
-                renderTimeSlots();
-                renderBreaksList();
-            }
-        }
-        
-        // Удаление перерыва из списка
-        function deleteBreakFromList(id) {
-            if (confirm('Вы уверены, что хотите удалить этот перерыв?')) {
-                breaks = breaks.filter(b => b.id != id);
-                saveBreaks();
-                renderBreaksList();
-                renderCalendar();
-                renderTimeSlots();
-            }
-        }
-        
-        // Удаление перерыва из модального окна
-        function deleteBreak() {
-            const id = document.getElementById('edit-break-modal').dataset.editingId;
-            
-            if (confirm('Вы уверены, что хотите удалить этот перерыв?')) {
-                breaks = breaks.filter(b => b.id != id);
-                saveBreaks();
-                editBreakModal.style.display = 'none';
-                alert('Перерыв удален');
-                
-                renderCalendar();
-                renderTimeSlots();
-                renderBreaksList();
-            }
-        }
-        
-        // Удаление выбранных элементов
-        function deleteSelectedItems() {
-            if (selectedBookings.length === 0 && selectedBreaks.length === 0) {
-                alert('Выберите записи или перерывы для удаления');
-                return;
-            }
-            
-            if (confirm(`Удалить ${selectedBookings.length} записей и ${selectedBreaks.length} перерывов?`)) {
-                // Удаляем выбранные записи
-                bookings = bookings.filter(b => !selectedBookings.includes(b.id));
-                
-                // Удаляем выбранные перерывы
-                breaks = breaks.filter(br => !selectedBreaks.includes(br.id));
-                
-                saveBookings();
-                saveBreaks();
-                
-                selectedBookings = [];
-                selectedBreaks = [];
-                
-                renderBookingsList();
-                renderBreaksList();
-                renderCalendar();
-                renderTimeSlots();
-                
-                alert('Выбранные элементы удалены');
-            }
-        }
-        
-        // Инициализация приложения
-        document.addEventListener('DOMContentLoaded', init);
-    
-function notifyClientWhatsApp(booking, oldDate, oldTime) {
-  const message = `Уважаемый(ая) ${booking.name}! Ваша запись на услугу "${booking.service}" перенесена с ${oldDate} ${oldTime} на ${booking.date} ${booking.time}.`;
-  const phone = booking.phone.replace(/\D/g, '');
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-  window.open(url, '_blank');
+function isAvailable(dateIso, startTime, duration, ignoreId=null){
+  const s=toMinutes(startTime), e=s+duration*60; const dow=new Date(dateIso).getDay(); const sched=workSchedule[dow]; if(!sched) return false; if(e>sched.end*60) return false; if(nowIsAfter(dateIso,startTime)) return false;
+  for(const br of breaks.filter(b=>b.date===dateIso)){ const brs=toMinutes(br.start), bre=toMinutes(br.end); if(!(e<=brs||s>=bre)) return false; }
+  for(const b of bookings.filter(b=>b.date===dateIso)){ if(ignoreId && b.id===ignoreId) continue; const bs=toMinutes(b.time), be=bs+b.duration*60; if(!(e<=bs||s>=be)) return false;}
+  return true;
 }
 
-
-// Установить выходной день и перенести записи
-function setDayOffAndReschedule(date) {
-  if (!dayOffs.includes(date)) {
-    dayOffs.push(date);
-    localStorage.setItem('dayOffs', JSON.stringify(dayOffs));
+function renderSlots(){
+  slotsEl.innerHTML='';
+  if(!selectedDate){ slotsEl.innerHTML='<div class="small" style="grid-column:1/-1;text-align:center">Сначала выберите дату</div>'; return; }
+  const dow = new Date(selectedDate).getDay();
+  const sched = workSchedule[dow];
+  if(!sched){ slotsEl.innerHTML='<div class="small" style="grid-column:1/-1;text-align:center;color:var(--danger)">Выходной</div>'; return; }
+  for(let h=sched.start; h<=sched.end; h++){
+    const time = String(h).padStart(2,'0')+':00';
+    const btn=document.createElement('div'); btn.className='slot'; btn.textContent=time; btn.dataset.time=time;
+    const booked = bookings.some(b=>b.date===selectedDate && b.time===time);
+    if(booked) btn.classList.add('booked');
+    if(nowIsAfter(selectedDate,time)) btn.classList.add('past');
+    if(selectedTime===time) btn.classList.add('selected');
+    btn.addEventListener('click', ()=>{
+      if(btn.classList.contains('booked')||btn.classList.contains('past')) return;
+      const opt = serviceEl.options[serviceEl.selectedIndex]; const dur = parseInt(opt.dataset.duration||'1');
+      if(!serviceEl.value){ alert('Выберите услугу'); return; }
+      if(!isAvailable(selectedDate,time,dur)) { alert('Недостаточно времени/конфликт'); return; }
+      selectedTime=time; renderSlots();
+      if(navigator.vibrate) navigator.vibrate(30);
+    });
+    slotsEl.appendChild(btn);
   }
-
-  bookings.forEach(booking => {
-    if (booking.date === date) {
-      const oldDate = booking.date;
-      const oldTime = booking.time;
-      const newSlot = findNextAvailableSlot(date);
-      if (newSlot) {
-        booking.date = newSlot.date;
-        booking.time = newSlot.time;
-        notifyClientWhatsApp(booking, oldDate, oldTime);
-      }
-    }
-  });
-
-  saveBookings();
-  renderCalendar();
-  renderBookings();
 }
 
-function findNextAvailableSlot(startDate) {
-  const [year, month, day] = startDate.split('-').map(Number);
-  let dateObj = new Date(year, month-1, day);
-  for (let i = 0; i < 365; i++) {
-    dateObj.setDate(dateObj.getDate() + 1);
-    const newDate = dateObj.toISOString().split('T')[0];
-    if (dayOffs.includes(newDate)) continue;
-    const times = generateTimeSlots();
-    for (let t of times) {
-      const busy = bookings.some(b => b.date === newDate && b.time === t);
-      if (!busy) return {date: newDate, time: t};
-    }
+/* navigation */
+prevBtn.addEventListener('click', ()=>{ current.setMonth(current.getMonth()-1); renderCalendar(); });
+nextBtn.addEventListener('click', ()=>{ current.setMonth(current.getMonth()+1); renderCalendar(); });
+
+/* booking */
+form.addEventListener('submit', e=>{ e.preventDefault(); const name=form.querySelector('#name').value.trim(); const phone=form.querySelector('#phone').value.trim(); const service=serviceEl.value; if(!selectedDate||!selectedTime){ alert('Выберите дату и время'); return; } const dur=parseInt(serviceEl.options[serviceEl.selectedIndex].dataset.duration||'1'); if(!isAvailable(selectedDate,selectedTime,dur)){ alert('Время занято'); renderSlots(); return; } const booking={id:Date.now(),date:selectedDate,time:selectedTime,name,phone,service,duration:dur}; bookings.push(booking); localStorage.setItem('bookings',JSON.stringify(bookings)); // notify master
+  const master = '+375297888280'; const msg = `Новая запись\n${booking.name} ${booking.phone}\n${booking.date} ${booking.time}\n${booking.service}`; window.open(`https://wa.me/${master.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`,'_blank');
+  alert('Запись подтверждена'); form.reset(); selectedTime=null; renderCalendar(); renderSlots();
+});
+
+/* admin panel logic */
+const adminPanel = document.getElementById('adminPanel');
+const loginBox = document.getElementById('loginBox');
+const loginBtn = document.getElementById('loginBtn');
+const adminPassword = document.getElementById('adminPassword');
+const loginError = document.getElementById('loginError');
+const adminContent = document.getElementById('adminContent');
+const bookingsList = document.getElementById('bookingsList');
+const breaksList = document.getElementById('breaksList');
+const addBreakBtn = document.getElementById('addBreakBtn');
+const clearAll = document.getElementById('clearAll');
+const logoutBtn = document.getElementById('logoutBtn');
+const closePanel = document.getElementById('closePanel');
+
+function openAdmin(){
+  adminPanel.classList.add('open'); adminPanel.setAttribute('aria-hidden','false');
+  if(sessionStorage.getItem('isAdmin')==='true'){ loginBox.style.display='none'; adminContent.style.display='block'; renderAdmin(); }
+}
+function closeAdmin(){ adminPanel.classList.remove('open'); adminPanel.setAttribute('aria-hidden','true'); }
+closePanel.addEventListener('click', closeAdmin);
+
+loginBtn.addEventListener('click', ()=>{
+  if(adminPassword.value==='andron18'){ sessionStorage.setItem('isAdmin','true'); loginBox.style.display='none'; adminContent.style.display='block'; adminPassword.value=''; renderAdmin(); } else { loginError.style.display='block'; }
+});
+
+function renderAdmin(){
+  bookingsList.innerHTML=''; breaksList.innerHTML='';
+  if(bookings.length===0) bookingsList.innerHTML='<div class="small">Нет записей</div>';
+  bookings.slice().sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time)).forEach(b=>{
+    const row=document.createElement('div'); row.className='booking-item'; row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px'; row.innerHTML=`<div><strong>${b.name}</strong><div class="small">${b.phone}</div><div class="small">${b.date} ${b.time} — ${b.service}</div></div>`;
+    const actions=document.createElement('div');
+    const del=document.createElement('button'); del.className='btn'; del.textContent='Удалить'; del.addEventListener('click', ()=>{ if(confirm('Удалить?')){ bookings=bookings.filter(x=>x.id!==b.id); localStorage.setItem('bookings',JSON.stringify(bookings)); renderAdmin(); renderCalendar(); renderSlots(); } });
+    const mv=document.createElement('button'); mv.className='btn'; mv.style.background='#444'; mv.textContent='Перенести'; mv.addEventListener('click', ()=>openMoveModal(b.id));
+    actions.appendChild(mv); actions.appendChild(del); row.appendChild(actions);
+    bookingsList.appendChild(row);
+  });
+  if(breaks.length===0) breaksList.innerHTML='<div class="small">Нет перерывов</div>';
+  breaks.slice().sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start)).forEach(br=>{
+    const r=document.createElement('div'); r.className='booking-item'; r.style.display='flex'; r.style.justifyContent='space-between'; r.innerHTML=`<div><strong>${br.date}</strong><div class="small">${br.start} – ${br.end}</div></div>`;
+    const del=document.createElement('button'); del.className='btn'; del.style.background='#444'; del.textContent='Удалить'; del.addEventListener('click', ()=>{ if(confirm('Удалить перерыв?')){ breaks=breaks.filter(x=>x.id!==br.id); localStorage.setItem('breaks',JSON.stringify(breaks)); renderAdmin(); renderCalendar(); renderSlots(); } });
+    r.appendChild(del); breaksList.appendChild(r);
+  });
+}
+
+addBreakBtn.addEventListener('click', ()=>{ openBreakModal(); });
+
+function openBreakModal(id=null){
+  document.getElementById('breakModal').classList.add('open');
+  if(id){ const br=breaks.find(x=>x.id===id); if(br){ document.getElementById('breakDate').value=br.date; document.getElementById('breakStart').value=br.start; document.getElementById('breakEnd').value=br.end; } }
+}
+document.getElementById('cancelBreak').addEventListener('click', ()=>{ document.getElementById('breakModal').classList.remove('open'); });
+document.getElementById('saveBreak').addEventListener('click', ()=>{
+  const d=document.getElementById('breakDate').value; const s=document.getElementById('breakStart').value; const e=document.getElementById('breakEnd').value;
+  if(!d||!s||!e){ alert('Заполните'); return;}
+  if(toMinutes(s)>=toMinutes(e)){ alert('Неверно'); return; }
+  // remove conflicting bookings
+  const conflict = bookings.some(b=>b.date===d && !(toMinutes(b.time)+b.duration*60 <= toMinutes(s) || toMinutes(b.time) >= toMinutes(e)));
+  if(conflict){ if(!confirm('Перерыв пересекается с записями. Удалить конфликтующие?')) return; bookings = bookings.filter(b=>!(b.date===d && !(toMinutes(b.time)+b.duration*60 <= toMinutes(s) || toMinutes(b.time) >= toMinutes(e)))); localStorage.setItem('bookings',JSON.stringify(bookings)); }
+  breaks.push({id:Date.now(),date:d,start:s,end:e}); localStorage.setItem('breaks',JSON.stringify(breaks));
+  document.getElementById('breakModal').classList.remove('open'); renderAdmin(); renderCalendar(); renderSlots();
+});
+
+/* move modal */
+let movingId=null;
+function openMoveModal(id){
+  movingId=id; document.getElementById('moveModal').classList.add('open');
+  const b=bookings.find(x=>x.id===id); if(b){ document.getElementById('moveDate').value=b.date; populateMoveTimes(b.date,b.duration); document.getElementById('moveTime').value=b.time; }
+}
+function populateMoveTimes(date,duration){
+  const sel=document.getElementById('moveTime'); sel.innerHTML='';
+  const dow=new Date(date).getDay(); const sched=workSchedule[dow]; if(!sched){ sel.innerHTML='<option>Выходной</option>'; return; }
+  for(let h=sched.start; h<=sched.end; h++){ const t=String(h).padStart(2,'0')+':00'; const opt=document.createElement('option'); opt.value=t; opt.textContent=t; if(!isAvailable(date,t,duration,movingId)){ opt.disabled=true; opt.textContent=t+' (недоступно)'; } sel.appendChild(opt); }
+}
+document.getElementById('cancelMove').addEventListener('click', ()=>{ document.getElementById('moveModal').classList.remove('open'); movingId=null; });
+document.getElementById('confirmMove').addEventListener('click', ()=>{
+  const b=bookings.find(x=>x.id===movingId); if(!b) return; const nd=document.getElementById('moveDate').value; const nt=document.getElementById('moveTime').value; if(!isAvailable(nd,nt,b.duration,movingId)){ alert('Недоступно'); return; } b.date=nd; b.time=nt; localStorage.setItem('bookings',JSON.stringify(bookings)); renderAdmin(); renderCalendar(); renderSlots(); document.getElementById('moveModal').classList.remove('open'); movingId=null;
+  // auto notify
+  const url=`https://wa.me/${b.phone.replace(/\D/g,'')}?text=${encodeURIComponent('Ваша запись перенесена на '+b.date+' '+b.time)}`;
+  window.open(url,'_blank');
+});
+
+/* swipe / click to open admin on scheduleBlock */
+const scheduleBlock = document.getElementById('scheduleBlock');
+if(scheduleBlock){
+  if('ontouchstart' in window){
+    let sx=0;
+    scheduleBlock.addEventListener('touchstart', e=>{ sx=e.touches[0].clientX; });
+    scheduleBlock.addEventListener('touchend', e=>{ const dx=e.changedTouches[0].clientX - sx; if(dx < -60){ openAdmin(); if(navigator.vibrate) navigator.vibrate(40); } });
+  } else {
+    scheduleBlock.addEventListener('click', ()=>{ openAdmin(); if(navigator.vibrate) navigator.vibrate(30); });
+  }
+}
+
+/* init */
+renderCalendar();
+renderSlots();
+
+/* --- Holidays management --- */
+let holidays = JSON.parse(localStorage.getItem('holidays')||'[]'); // array of 'YYYY-MM-DD'
+
+function saveHolidays(){ localStorage.setItem('holidays', JSON.stringify(holidays)); }
+
+function renderHolidaysList(){
+  const el = document.getElementById('holidaysList');
+  if(!el) return;
+  el.innerHTML = '';
+  if(holidays.length===0){ el.innerHTML = '<div class="small">Нет выходных</div>'; return; }
+  holidays.slice().sort().forEach(h=>{
+    const row = document.createElement('div'); row.className='booking-item';
+    const meta = document.createElement('div'); meta.className='meta';
+    meta.innerHTML = '<strong>'+h+'</strong>';
+    const actions = document.createElement('div');
+    const del = document.createElement('button'); del.className='btn'; del.style.background='#444'; del.textContent='Удалить';
+    del.addEventListener('click', ()=>{ if(!confirm('Удалить выходной '+h+'?')) return; removeHoliday(h); });
+    actions.appendChild(del);
+    row.appendChild(meta); row.appendChild(actions);
+    el.appendChild(row);
+  });
+}
+
+function isHoliday(dateIso){ return holidays.includes(dateIso); }
+
+// mark holiday and weekend in calendar
+const origRenderCalendar = renderCalendar;
+renderCalendar = function(){
+  origRenderCalendar();
+  // after rendering days, mark holiday cells
+  document.querySelectorAll('#calendar .day').forEach(node=>{
+    const iso = node.dataset.date;
+    if(!iso) return;
+    const dow = new Date(iso).getDay();
+    if(!workSchedule[dow]) node.classList.add('weekend');
+    if(isHoliday(iso)) node.classList.add('weekend');
+  });
+};
+
+/* find next available date for booking keeping same time and duration (search next 30 days) */
+function findNextAvailable(dateIso, timeStr, duration){
+  const start = new Date(dateIso);
+  for(let i=1;i<=30;i++){
+    const d = new Date(start); d.setDate(start.getDate()+i);
+    const iso = localIso(d);
+    const dow = d.getDay();
+    const sched = workSchedule[dow];
+    if(!sched) continue;
+    // same start time availability
+    if(isAvailable(iso, timeStr, duration)) return iso;
   }
   return null;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('setDayOffBtn').addEventListener('click', () => {
-    if (selectedDate) {
-      if (confirm('Сделать ' + selectedDate + ' выходным и перенести все записи?')) {
-        setDayOffAndReschedule(selectedDate);
-      }
+/* add holiday and auto-move bookings */
+function addHoliday(dateIso){
+  if(holidays.includes(dateIso)) return;
+  holidays.push(dateIso); saveHolidays();
+  // find bookings on that date
+  const toMove = bookings.filter(b=>b.date===dateIso);
+  toMove.forEach(b=>{
+    const newDate = findNextAvailable(b.date, b.time, b.duration);
+    if(newDate){
+      b.date = newDate;
+      // notify client via WhatsApp
+      const msg = 'Ваша запись перенесена на '+b.date+' '+b.time+'. Услуга: '+b.service;
+      window.open('https://wa.me/'+b.phone.replace(/\D/g,'')+'?text='+encodeURIComponent(msg), '_blank');
     } else {
-      alert('Сначала выберите дату в календаре');
+      // if no slot found, leave booking and alert admin
+      console.warn('Не удалось найти место для переноса записи', b);
     }
   });
+  localStorage.setItem('bookings', JSON.stringify(bookings));
+  renderHolidaysList();
+  renderAdmin();
+  renderCalendar();
+  renderSlots();
+}
+
+/* remove holiday */
+function removeHoliday(dateIso){
+  holidays = holidays.filter(h=>h!==dateIso); saveHolidays();
+  renderHolidaysList(); renderCalendar(); renderSlots();
+}
+
+/* hook admin buttons */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const addHolidayBtn = document.getElementById('addHolidayBtn');
+  const holidayModal = document.getElementById('holidayModal');
+  const holidayDate = document.getElementById('holidayDate');
+  const saveHoliday = document.getElementById('saveHoliday');
+  const cancelHoliday = document.getElementById('cancelHoliday');
+  renderHolidaysList();
+  if(addHolidayBtn){
+    addHolidayBtn.addEventListener('click', ()=>{ holidayModal.classList.add('open'); });
+  }
+  if(cancelHoliday) cancelHoliday.addEventListener('click', ()=>{ holidayModal.classList.remove('open'); });
+  if(saveHoliday){
+    saveHoliday.addEventListener('click', ()=>{
+      const d = holidayDate.value;
+      if(!d){ alert('Выберите дату'); return; }
+      addHoliday(d);
+      holidayModal.classList.remove('open');
+    });
+  }
 });
 
-</script>
 
-<style>
-/* Скрыть имена клиентов в календаре */
-.calendar-day .client-name {
-  display: none !important;
-}
-</style>
-<script>
-// Переопределяем функцию sendNotificationToMaster
-function sendNotificationToMaster(booking) {
-    const message = `Новая запись!\n\nКлиент: ${booking.name}\nТелефон: ${booking.phone}\nДата: ${booking.date}\nВремя: ${booking.time}\nУслуга: ${booking.service} (${booking.duration} ч.)\n\nСсылка на календарь: ${window.location.href}`;
-    const masterPhone = '+375297888280';
-    const whatsappUrl = `https://wa.me/${masterPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-}
-
-// Переопределяем функцию adminNotifyClient
-function adminNotifyClient(time) {
-    if (!selectedDate) return;
-    const booking = bookings.find(b => b.date === selectedDate && b.time === time);
-    if (!booking) {
-        alert('На это время нет записей');
-        return;
+/* validate selectedTime when user changes service with auto-pick */
+serviceEl.addEventListener('change', ()=>{
+  if(!selectedDate) return;
+  if(!serviceEl.value) return;
+  if(!selectedTime) return; // no time selected yet
+  const dur = parseInt(serviceEl.options[serviceEl.selectedIndex].dataset.duration||'1');
+  if(!isAvailable(selectedDate, selectedTime, dur)){
+    // find next available
+    const d = new Date(selectedDate);
+    let foundTime = null;
+    const dow = d.getDay();
+    const sched = workSchedule[dow];
+    if(sched){
+      for(let h=parseInt(selectedTime); h<=sched.end; h++){
+        const t = String(h).padStart(2,'0')+':00';
+        if(isAvailable(selectedDate,t,dur)){foundTime=t;break;}
+      }
     }
-    const message = `Напоминание о записи: ${selectedDate} в ${time}. Услуга: ${booking.service}`;
-    const whatsappUrl = `https://wa.me/${booking.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-}
-
-// Добавляем проверку на прошедшее время в handleBooking
-const oldHandleBooking = handleBooking;
-handleBooking = function(e) {
-    const now = new Date();
-    const selectedDateTime = new Date(`${selectedDate}T${selectedTime}`);
-    if (selectedDateTime < now) {
-        alert('Нельзя записаться на прошедшее время');
-        e.preventDefault();
-        return;
+    if(foundTime){
+      selectedTime=foundTime; renderSlots();
+      alert('Выбранная услуга не помещается в это время. Мы подобрали ближайшее доступное время — '+foundTime);
+    }else{
+      alert('Выбранная услуга не помещается в это время и нет доступного слота. Выберите другое время.');
+      selectedTime=null; renderSlots();
     }
-    oldHandleBooking.call(this, e);
-}
+  }
+});
+
 </script>
 </body>
 </html>
