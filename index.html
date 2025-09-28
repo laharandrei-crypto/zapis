@@ -217,6 +217,8 @@ form button{background:linear-gradient(135deg,var(--accent1),var(--accent2));bor
 </div></div>
 
 <script>
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzMDZsiIxPeN8xYZUbUOPyBc18DW6TruEW3pW6Mw36DLumUYImBW-EnSaM7Jayhc9V5sw/exec';
+
 /* Data */
 let current = new Date();
 let selectedDate = null;
@@ -288,7 +290,8 @@ prevBtn.addEventListener('click', ()=>{ current.setMonth(current.getMonth()-1); 
 nextBtn.addEventListener('click', ()=>{ current.setMonth(current.getMonth()+1); renderCalendar(); });
 
 /* booking */
-form.addEventListener('submit', e=>{ e.preventDefault(); const name=form.querySelector('#name').value.trim(); const phone=form.querySelector('#phone').value.trim(); const service=serviceEl.value; if(!selectedDate||!selectedTime){ alert('Выберите дату и время'); return; } const dur=parseInt(serviceEl.options[serviceEl.selectedIndex].dataset.duration||'1'); if(!isAvailable(selectedDate,selectedTime,dur)){ alert('Время занято'); renderSlots(); return; } const booking={id:Date.now(),date:selectedDate,time:selectedTime,name,phone,service,duration:dur}; bookings.push(booking); localStorage.setItem('bookings',JSON.stringify(bookings)); // notify master
+form.addEventListener('submit', e=>{ e.preventDefault(); const name=form.querySelector('#name').value.trim(); const phone=form.querySelector('#phone').value.trim(); const service=serviceEl.value; if(!selectedDate||!selectedTime){ alert('Выберите дату и время'); return; } const dur=parseInt(serviceEl.options[serviceEl.selectedIndex].dataset.duration||'1'); if(!isAvailable(selectedDate,selectedTime,dur)){ alert('Время занято'); renderSlots(); return; } const booking={id:Date.now(),date:selectedDate,time:selectedTime,name,phone,service,duration:dur}; bookings.push(booking); // localStorage update replaced by syncSave
+syncSave('set_all', bookings).catch(e=>console.error(e)); // notify master
   const master = '+375297888280'; const msg = `Новая запись\n${booking.name} ${booking.phone}\n${booking.date} ${booking.time}\n${booking.service}`; window.open(`https://wa.me/${master.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`,'_blank');
   alert('Запись подтверждена'); form.reset(); selectedTime=null; renderCalendar(); renderSlots();
 });
@@ -324,7 +327,8 @@ function renderAdmin(){
   bookings.slice().sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time)).forEach(b=>{
     const row=document.createElement('div'); row.className='booking-item'; row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px'; row.innerHTML=`<div><strong>${b.name}</strong><div class="small">${b.phone}</div><div class="small">${b.date} ${b.time} — ${b.service}</div></div>`;
     const actions=document.createElement('div');
-    const del=document.createElement('button'); del.className='btn'; del.textContent='Удалить'; del.addEventListener('click', ()=>{ if(confirm('Удалить?')){ bookings=bookings.filter(x=>x.id!==b.id); localStorage.setItem('bookings',JSON.stringify(bookings)); renderAdmin(); renderCalendar(); renderSlots(); } });
+    const del=document.createElement('button'); del.className='btn'; del.textContent='Удалить'; del.addEventListener('click', ()=>{ if(confirm('Удалить?')){ bookings=bookings.filter(x=>x.id!==b.id); // localStorage update replaced by syncSave
+syncSave('set_all', bookings).catch(e=>console.error(e)); renderAdmin(); renderCalendar(); renderSlots(); } });
     const mv=document.createElement('button'); mv.className='btn'; mv.style.background='#444'; mv.textContent='Перенести'; mv.addEventListener('click', ()=>openMoveModal(b.id));
     actions.appendChild(mv); actions.appendChild(del); row.appendChild(actions);
     bookingsList.appendChild(row);
@@ -350,7 +354,8 @@ document.getElementById('saveBreak').addEventListener('click', ()=>{
   if(toMinutes(s)>=toMinutes(e)){ alert('Неверно'); return; }
   // remove conflicting bookings
   const conflict = bookings.some(b=>b.date===d && !(toMinutes(b.time)+b.duration*60 <= toMinutes(s) || toMinutes(b.time) >= toMinutes(e)));
-  if(conflict){ if(!confirm('Перерыв пересекается с записями. Удалить конфликтующие?')) return; bookings = bookings.filter(b=>!(b.date===d && !(toMinutes(b.time)+b.duration*60 <= toMinutes(s) || toMinutes(b.time) >= toMinutes(e)))); localStorage.setItem('bookings',JSON.stringify(bookings)); }
+  if(conflict){ if(!confirm('Перерыв пересекается с записями. Удалить конфликтующие?')) return; bookings = bookings.filter(b=>!(b.date===d && !(toMinutes(b.time)+b.duration*60 <= toMinutes(s) || toMinutes(b.time) >= toMinutes(e)))); // localStorage update replaced by syncSave
+syncSave('set_all', bookings).catch(e=>console.error(e)); }
   breaks.push({id:Date.now(),date:d,start:s,end:e}); localStorage.setItem('breaks',JSON.stringify(breaks));
   document.getElementById('breakModal').classList.remove('open'); renderAdmin(); renderCalendar(); renderSlots();
 });
@@ -368,7 +373,8 @@ function populateMoveTimes(date,duration){
 }
 document.getElementById('cancelMove').addEventListener('click', ()=>{ document.getElementById('moveModal').classList.remove('open'); movingId=null; });
 document.getElementById('confirmMove').addEventListener('click', ()=>{
-  const b=bookings.find(x=>x.id===movingId); if(!b) return; const nd=document.getElementById('moveDate').value; const nt=document.getElementById('moveTime').value; if(!isAvailable(nd,nt,b.duration,movingId)){ alert('Недоступно'); return; } b.date=nd; b.time=nt; localStorage.setItem('bookings',JSON.stringify(bookings)); renderAdmin(); renderCalendar(); renderSlots(); document.getElementById('moveModal').classList.remove('open'); movingId=null;
+  const b=bookings.find(x=>x.id===movingId); if(!b) return; const nd=document.getElementById('moveDate').value; const nt=document.getElementById('moveTime').value; if(!isAvailable(nd,nt,b.duration,movingId)){ alert('Недоступно'); return; } b.date=nd; b.time=nt; // localStorage update replaced by syncSave
+syncSave('set_all', bookings).catch(e=>console.error(e)); renderAdmin(); renderCalendar(); renderSlots(); document.getElementById('moveModal').classList.remove('open'); movingId=null;
   // auto notify
   const url=`https://wa.me/${b.phone.replace(/\D/g,'')}?text=${encodeURIComponent('Ваша запись перенесена на '+b.date+' '+b.time)}`;
   window.open(url,'_blank');
@@ -462,7 +468,8 @@ function addHoliday(dateIso){
       console.warn('Не удалось найти место для переноса записи', b);
     }
   });
-  localStorage.setItem('bookings', JSON.stringify(bookings));
+  // localStorage update replaced by syncSave
+syncSave('set_all', bookings).catch(e=>console.error(e));
   renderHolidaysList();
   renderAdmin();
   renderCalendar();
@@ -525,6 +532,22 @@ serviceEl.addEventListener('change', ()=>{
     }
   }
 });
+
+
+// Функция отправки WhatsApp
+function notifyWhatsApp(phone, text) {
+  try {
+    if (!phone) {
+      console.warn('Телефон не указан для WhatsApp уведомления');
+      return;
+    }
+    const url = 'https://wa.me/' + encodeURIComponent(phone) + '?text=' + encodeURIComponent(text);
+    window.open(url, '_blank');
+  } catch (err) {
+    console.error('Ошибка формирования WhatsApp уведомления', err);
+    alert('Не удалось открыть WhatsApp: ' + err.message);
+  }
+}
 
 </script>
 </body>
