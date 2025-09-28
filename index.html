@@ -238,6 +238,11 @@ body{
   color:#fff !important;
 }
 
+
+.service-btn.selected {
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  color:#fff;
+}
 </style>
 
 
@@ -680,7 +685,7 @@ form.addEventListener('submit', async function(e){
   bookings.push(booking);
   await syncSave('set_all', bookings);
   renderCalendar(); renderSlots();
-  form.reset(); selectedTime=null;
+  form.reset(); //selectedTime не сбрасываем;
   alert('Запись подтверждена');
   // notify admin
   notifyWhatsApp('+375297888280', `Новая запись\nКлиент: ${booking.name} ${booking.phone}\n${booking.date} ${booking.time}\n${booking.service}`);
@@ -1119,6 +1124,36 @@ document.addEventListener('DOMContentLoaded', ()=>{
     adminPanel.classList.remove('open');
     adminPanel.setAttribute('aria-hidden','true');
   });
+})();
+
+// === Added by GPT for service button selection + swipe admin panel ===
+(function(){
+  // подсветка выбранной услуги
+  const serviceEl = document.getElementById('service');
+  document.addEventListener('click',function(e){
+    if(e.target.classList.contains('service-btn')){
+      document.querySelectorAll('.service-btn').forEach(b=>b.classList.remove('selected'));
+      e.target.classList.add('selected');
+      serviceEl.value = e.target.dataset.value || e.target.textContent.trim();
+      if(typeof renderSlots==='function') renderSlots();
+    }
+  });
+  // свайп для открытия/закрытия админ панели по графику работы
+  let touchStartX=null;
+  const schedBlock=document.getElementById('scheduleBlock');
+  if(schedBlock){
+    schedBlock.addEventListener('touchstart',e=>{
+      touchStartX=e.changedTouches[0].clientX;
+    });
+    schedBlock.addEventListener('touchend',e=>{
+      if(touchStartX!==null){
+        const dx=e.changedTouches[0].clientX-touchStartX;
+        if(dx< -50){ document.getElementById('adminPanel').classList.add('open'); }
+        if(dx>50){ document.getElementById('adminPanel').classList.remove('open'); }
+        touchStartX=null;
+      }
+    });
+  }
 })();
 </script>
 
